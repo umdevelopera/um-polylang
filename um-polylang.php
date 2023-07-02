@@ -3,12 +3,12 @@
 	Plugin Name: Ultimate Member - Polylang
 	Plugin URI:  https://github.com/umdevelopera/um-polylang
 	Description: Integrates Ultimate Member with Polylang.
-	Version:     1.0.1
+	Version:     1.0.2
 	Author:      umdevelopera
 	Author URI:  https://github.com/umdevelopera
 	Text Domain: um-polylang
 	Domain Path: /languages
-	UM version:  2.5.0
+	UM version:  2.6.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -42,7 +42,10 @@ class Fields {
 	public function profile_bio_key( $key, $args ) {
 		if ( 'description' === $key ) {
 			$curlang_slug = pll_current_language();
-			$key          = 'description_' . $curlang_slug;
+			$curlang_key  = 'description_' . $curlang_slug;
+			if ( um_profile( $curlang_key ) || UM()->fields()->editing ) {
+				$key = $curlang_key;
+			}
 		}
 		return $key;
 	}
@@ -66,10 +69,12 @@ class Fields {
 		}
 		if ( 'description' === $key ) {
 			$curlang_slug = pll_current_language();
-			$description  = get_user_meta( um_profile_id(), 'description_' . $curlang_slug, true );
-			if ( $description ) {
-				$value = $description;
+			$curlang_key  = 'description_' . $curlang_slug;
+			if ( um_profile( $curlang_key ) ) {
+				$value = um_profile( $curlang_key );
 			}
+		} elseif ( empty( $value ) && 0 === strpos( $key, 'description_' ) ) {
+			$value = um_filtered_value( 'description', $data );
 		}
 		return $value;
 	}
@@ -86,14 +91,14 @@ class Fields {
 	 */
 	public function profile_bio_update( $user_id, $args ) {
 		$curlang_slug = pll_current_language();
-		$bio_key      = 'description_' . $curlang_slug;
-		if ( isset( $args[ $bio_key ] ) ) {
-			update_user_meta( $user_id, $bio_key, $args[ $bio_key ] );
+		$curlang_key  = 'description_' . $curlang_slug;
+		if ( isset( $args[ $curlang_key ] ) ) {
+			update_user_meta( $user_id, $curlang_key, $args[ $curlang_key ] );
 			if ( pll_default_language() === $curlang_slug ) {
-				update_user_meta( $user_id, 'description', $args[ $bio_key ] );
+				update_user_meta( $user_id, 'description', $args[ $curlang_key ] );
 			}
-		} elseif ( isset( $args['description'] ) ) {
-			update_user_meta( $user_id, $bio_key, $args['description'] );
+		} elseif ( isset( $args[ 'description' ] ) ) {
+			update_user_meta( $user_id, 'description', $args[ 'description' ] );
 		}
 	}
 

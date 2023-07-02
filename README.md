@@ -20,7 +20,7 @@ Open git bash, navigate to the **plugins** folder and execute this command:
 Once the plugin is cloned, enter your site admin dashboard and go to _wp-admin > Plugins > Installed Plugins_. Find the "Ultimate Member - Polylang" plugin and click the "Activate" link.
 
 ### Install from ZIP archive
-You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/1pP84L2syUXzNKlwzBSKVBqdmBsPtge--/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
+You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/175PVG6tLK7z1wcrAawFfQdTVIC071Eup/view) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
 
 ## How to use
 Go to *wp-admin > Ultimate Member > Settings > Email* to translate email templates. Click the "+" icon unter the flag to translate a template for the needed language. The plugin saves translated email templates to locale subfolders in the theme. See details [here](https://docs.ultimatemember.com/article/1335-email-templates).
