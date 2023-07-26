@@ -42,12 +42,35 @@ class UM_Polylang {
 	 * Class UM_Polylang constructor.
 	 */
 	public function __construct() {
-		if ( $this->is_active() ) {
+		$this->mail();
+		$this->permalinks();
+
+		if( UM()->is_ajax() ) {
+
+		} elseif ( UM()->is_request( 'admin' ) ) {
+			$this->admin();
+		} elseif ( UM()->is_request( 'frontend' ) ) {
 			$this->fields();
 			$this->form();
-			$this->mail();
-			$this->permalinks();
 		}
+
+		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
+	}
+
+
+	/**
+	 * Subclass that extends wp-admin features.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return um_ext\um_polylang\admin\Admin()
+	 */
+	public function admin() {
+		if ( empty( UM()->classes['um_polylang_admin'] ) ) {
+			require_once um_polylang_path . 'includes/admin/class-admin.php';
+			UM()->classes['um_polylang_admin'] = new um_ext\um_polylang\admin\Admin();
+		}
+		return UM()->classes['um_polylang_admin'];
 	}
 
 
@@ -58,6 +81,7 @@ class UM_Polylang {
 	 */
 	public function fields() {
 		if ( empty( UM()->classes['um_polylang_fields'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-fields.php';
 			UM()->classes['um_polylang_fields'] = new um_ext\um_polylang\core\Fields();
 		}
 		return UM()->classes['um_polylang_fields'];
@@ -71,6 +95,7 @@ class UM_Polylang {
 	 */
 	public function form() {
 		if ( empty( UM()->classes['um_polylang_form'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-form.php';
 			UM()->classes['um_polylang_form'] = new um_ext\um_polylang\core\Form();
 		}
 		return UM()->classes['um_polylang_form'];
@@ -84,6 +109,7 @@ class UM_Polylang {
 	 */
 	public function mail() {
 		if ( empty( UM()->classes['um_polylang_mail'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-mail.php';
 			UM()->classes['um_polylang_mail'] = new um_ext\um_polylang\core\Mail();
 		}
 		return UM()->classes['um_polylang_mail'];
@@ -97,9 +123,36 @@ class UM_Polylang {
 	 */
 	public function permalinks() {
 		if ( empty( UM()->classes['um_polylang_permalinks'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-permalinks.php';
 			UM()->classes['um_polylang_permalinks'] = new um_ext\um_polylang\core\Permalinks();
 		}
 		return UM()->classes['um_polylang_permalinks'];
+	}
+
+
+	/**
+	 * Subclass that setup pages and forms.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return um_ext\um_polylang\core\Setup()
+	 */
+	public function setup() {
+		if ( empty( UM()->classes['um_polylang_setup'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-setup.php';
+			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\core\Setup();
+		}
+		return UM()->classes['um_polylang_setup'];
+	}
+
+
+	/**
+	 * Loads a plugin's translated strings.
+	 */
+	public function textdomain() {
+		$locale = get_locale() ? get_locale() : 'en_US';
+		load_textdomain( um_polylang_textdomain, WP_LANG_DIR . '/plugins/' . um_polylang_textdomain . '-' . $locale . '.mo' );
+		load_plugin_textdomain( um_polylang_textdomain, false, dirname( um_polylang_plugin ) . '/languages/' );
 	}
 
 
@@ -108,12 +161,10 @@ class UM_Polylang {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global object $polylang The Polylang instance.
 	 * @param  string $field Optional, the language field to return (@see PLL_Language), defaults to `'slug'`.
 	 * @return string|int|bool|string[]|PLL_Language The requested field or object for the current language, `false` if the field isn't set.
 	 */
 	public function get_current( $field = 'slug' ) {
-		global $polylang;
 
 		$lang = pll_current_language();
 		if ( isset( $_GET['lang'] ) ) {
@@ -122,9 +173,9 @@ class UM_Polylang {
 		if ( empty( $lang ) || 'all' === $lang ) {
 			$lang = substr( get_locale(), 0, 2 );
 		}
-		$language = $polylang->model->get_language( $lang );
+		$language = PLL()->model->get_language( $lang );
 
-		return $language->get_prop( $field );
+		return is_object( $language ) ? $language->get_prop( $field ) : $lang;
 	}
 
 
@@ -142,18 +193,27 @@ class UM_Polylang {
 
 
 	/**
+	 * Returns the list of available languages.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return array
+	 */
+	public function get_languages_list() {
+		return pll_languages_list();
+	}
+
+
+	/**
 	 * Check if Polylang is active.
 	 *
-	 * @since 1.0.0
+	 * @since   1.0.0
+	 * @version 1.1.0 Check for the PLL function.
 	 *
 	 * @return boolean
 	 */
 	public function is_active() {
-		if ( defined( 'POLYLANG_VERSION' ) ) {
-			global $polylang;
-			return isset( $polylang ) && is_object( $polylang );
-		}
-		return false;
+		return defined( 'POLYLANG_VERSION' ) && function_exists( 'PLL' );
 	}
 
 
