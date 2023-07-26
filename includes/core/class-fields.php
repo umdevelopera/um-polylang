@@ -29,6 +29,7 @@ class Fields {
 		add_filter( 'um_profile_bio_key', array( &$this, 'profile_bio_key' ), 20, 2 );
 	}
 
+
 	/**
 	 * Get translated biography key
 	 *
@@ -41,7 +42,7 @@ class Fields {
 	 */
 	public function profile_bio_key( $key, $args ) {
 		if ( 'description' === $key ) {
-			$curlang_slug = pll_current_language();
+			$curlang_slug = UM()->Polylang()->get_current();
 			$curlang_key  = 'description_' . $curlang_slug;
 			if ( um_profile( $curlang_key ) || UM()->fields()->editing ) {
 				$key = $curlang_key;
@@ -68,7 +69,7 @@ class Fields {
 			$key = $data['metakey'];
 		}
 		if ( 'description' === $key ) {
-			$curlang_slug = pll_current_language();
+			$curlang_slug = UM()->Polylang()->get_current();
 			$curlang_key  = 'description_' . $curlang_slug;
 			if ( um_profile( $curlang_key ) ) {
 				$value = um_profile( $curlang_key );
@@ -83,22 +84,22 @@ class Fields {
 	/**
 	 * Save translated biography
 	 *
-	 * @since  2.1.7
-	 * @hook   um_after_user_updated
+	 * @since 1.0.0
+	 * @hook  um_after_user_updated
 	 *
 	 * @param integer $user_id User ID.
 	 * @param array   $args    Form Data.
 	 */
 	public function profile_bio_update( $user_id, $args ) {
-		$curlang_slug = pll_current_language();
+		$curlang_slug = UM()->Polylang()->get_current();
 		$curlang_key  = 'description_' . $curlang_slug;
 		if ( isset( $args[ $curlang_key ] ) ) {
 			update_user_meta( $user_id, $curlang_key, $args[ $curlang_key ] );
-			if ( pll_default_language() === $curlang_slug ) {
+			if ( UM()->Polylang()->is_default() ) {
 				update_user_meta( $user_id, 'description', $args[ $curlang_key ] );
 			}
-		} elseif ( isset( $args[ 'description' ] ) ) {
-			update_user_meta( $user_id, 'description', $args[ 'description' ] );
+		} elseif ( isset( $args['description'] ) ) {
+			update_user_meta( $user_id, $curlang_key, $args['description'] );
 		}
 	}
 

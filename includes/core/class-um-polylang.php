@@ -124,7 +124,7 @@ class UM_Polylang {
 		}
 		$language = $polylang->model->get_language( $lang );
 
-		return $language->get_prop( $field );
+		return is_object( $language ) ? $language->get_prop( $field ) : $lang;
 	}
 
 
@@ -138,6 +138,18 @@ class UM_Polylang {
 	 */
 	public function get_default( $field = 'slug' ) {
 		return pll_default_language( $field );
+	}
+
+
+	/**
+	 * Returns the list of available languages.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @return array
+	 */
+	public function get_languages_list() {
+		return pll_languages_list();
 	}
 
 

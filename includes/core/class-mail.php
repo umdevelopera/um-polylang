@@ -119,9 +119,6 @@ class Mail {
 
 			$flags_column = '';
 			foreach ( $languages as $language ) {
-//				if ( UM()->Polylang()->get_current() === $language ) {
-//					continue;
-//				}
 				$language      = $polylang->model->get_language( $language );
 				$flags_column .= '<span class="um-flag" style="margin:2px">' . $language->flag . '</span>';
 			}
@@ -156,9 +153,6 @@ class Mail {
 		foreach ( $email_notifications as &$email_notification ) {
 			$email_notification['pll_translations'] = '';
 			foreach ( $languages as $language ) {
-//				if ( UM()->Polylang()->get_current() === $language ) {
-//					continue;
-//				}
 				$email_notification['pll_translations'] .= $this->email_table_cell_pll_translations( $email_notification['key'], $language );
 			}
 		}
@@ -182,11 +176,7 @@ class Mail {
 
 		$language = $polylang->model->get_language( $code );
 		$default  = pll_default_language();
-
-		$lang = '';
-		if ( $code !== $default ) {
-			$lang = $language->locale . '/';
-		}
+		$lang     = $code === $default ? '' : trailingslashit( $code );
 
 		// theme location.
 		$template_path = trailingslashit( get_stylesheet_directory() . '/ultimate-member/email' ) . $lang . $template . '.php';
@@ -203,10 +193,12 @@ class Mail {
 			)
 		);
 
+		$language_name = is_object( $language ) ? $language->name : $code;
+
 		if ( file_exists( $template_path ) ) {
 
 			// translators: %s - language name.
-			$hint      = sprintf( __( 'Edit the translation in %s', 'polylang' ), $language->name );
+			$hint      = sprintf( __( 'Edit the translation in %s', 'polylang' ), $language_name );
 			$icon_html = sprintf(
 				'<a href="%1$s" title="%2$s" class="pll_icon_edit"><span class="screen-reader-text">%3$s</span></a>',
 				esc_url( $link ),
@@ -216,7 +208,7 @@ class Mail {
 		} else {
 
 			// translators: %s - language name.
-			$hint      = sprintf( __( 'Add a translation in %s', 'polylang' ), $language->name );
+			$hint      = sprintf( __( 'Add a translation in %s', 'polylang' ), $language_name );
 			$icon_html = sprintf(
 				'<a href="%1$s" title="%2$s" class="pll_icon_add"><span class="screen-reader-text">%3$s</span></a>',
 				esc_url( $link ),

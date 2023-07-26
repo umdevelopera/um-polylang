@@ -4,11 +4,11 @@ Author URI: https://github.com/umdevelopera
 Plugin URI: https://github.com/umdevelopera/um-polylang
 Tags: ultimate member, polylang, multilingual
 Requires at least: 6.0
-Tested up to: 6.2.2
-Stable tag: 1.0.0
+Tested up to: 6.3
+Stable tag: 1.0.2
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
-Requires UM core at least: 2.5.0
+Requires UM core at least: 2.6.7
 
 == Description ==
 

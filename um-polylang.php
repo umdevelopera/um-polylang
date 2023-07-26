@@ -3,12 +3,12 @@
 	Plugin Name: Ultimate Member - Polylang
 	Plugin URI:  https://github.com/umdevelopera/um-polylang
 	Description: Integrates Ultimate Member with Polylang.
-	Version:     1.0.2
+	Version:     1.0.3-alpha1
 	Author:      umdevelopera
 	Author URI:  https://github.com/umdevelopera
 	Text Domain: um-polylang
 	Domain Path: /languages
-	UM version:  2.6.2
+	UM version:  2.6.7
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -78,8 +78,8 @@ if ( ! function_exists( 'um_polylang_check_dependencies' ) ) {
 					UM()->set_class( 'Polylang', true );
 				}
 			}
-			add_action( 'plugins_loaded', 'um_polylang_init', 2, 1 );
+			add_action( 'plugins_loaded', 'um_polylang_init', 4, 1 );
 		}
 	}
 }
-add_action( 'plugins_loaded', 'um_polylang_check_dependencies', -20 );
+add_action( 'plugins_loaded', 'um_polylang_check_dependencies', 2 );
