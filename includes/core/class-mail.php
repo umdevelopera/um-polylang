@@ -40,6 +40,7 @@ class Mail {
 
 	/**
 	 * Adding locale suffix to the "Subject Line" field.
+	 *
 	 * Example: change 'welcome_email_sub' to 'welcome_email_sub_de_DE'
 	 *
 	 * @since 1.0.0
@@ -106,28 +107,26 @@ class Mail {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global object $polylang The Polylang instance.
-	 *
 	 * @param  array $columns The Email table headers.
 	 * @return array
 	 */
 	public function email_table_columns( $columns ) {
-		global $polylang;
-		$languages = pll_languages_list();
 
+		$languages = pll_languages_list();
 		if ( count( $languages ) > 0 ) {
 
-			$flags_column = '';
+			$flags = '';
 			foreach ( $languages as $language ) {
-				$language      = $polylang->model->get_language( $language );
-				$flags_column .= '<span class="um-flag" style="margin:2px">' . $language->flag . '</span>';
+				$language = PLL()->model->get_language( $language );
+				$flag     = is_object( $language ) ? $language->flag : $language;
+				$flags   .= '<span class="um-flag" style="margin:2px">' . $flag . '</span>';
 			}
 
 			$new_columns = array();
 			foreach ( $columns as $column_key => $column_content ) {
 				$new_columns[ $column_key ] = $column_content;
 				if ( 'email' === $column_key && ! isset( $new_columns['pll_translations'] ) ) {
-					$new_columns['pll_translations'] = $flags_column;
+					$new_columns['pll_translations'] = $flags;
 				}
 			}
 
@@ -139,7 +138,6 @@ class Mail {
 
 
 	/**
-	 *
 	 * Add cell for the column 'translations' in the Email table.
 	 *
 	 * @since 1.0.0
@@ -153,36 +151,35 @@ class Mail {
 		foreach ( $email_notifications as &$email_notification ) {
 			$email_notification['pll_translations'] = '';
 			foreach ( $languages as $language ) {
-				$email_notification['pll_translations'] .= $this->email_table_cell_pll_translations( $email_notification['key'], $language );
+				$email_notification['pll_translations'] .= $this->email_table_link( $email_notification['key'], $language );
 			}
 		}
 
 		return $email_notifications;
 	}
 
+
 	/**
-	 * Get content for the cell of the column 'translations' in the Email table.
+	 * Get a link to Add/Edit email template for a certain language.
 	 *
-	 * @since  2.1.6
-	 *
-	 * @global object $polylang The Polylang instance.
+	 * @since   1.0.0
+	 * @version 1.0.3 Use locale instead of the code in the template path.
 	 *
 	 * @param  string $template The email template slug.
 	 * @param  string $code     Slug or locale of the queried language.
 	 * @return string
 	 */
-	public function email_table_cell_pll_translations( $template, $code ) {
-		global $polylang;
+	public function email_table_link( $template, $code ) {
 
-		$language = $polylang->model->get_language( $code );
+		$language = PLL()->model->get_language( $code );
 		$default  = pll_default_language();
-		$lang     = $code === $default ? '' : trailingslashit( $code );
+		$locale   = $code === $default ? '' : trailingslashit( $language->get_prop( 'locale' ) );
 
 		// theme location.
-		$template_path = trailingslashit( get_stylesheet_directory() . '/ultimate-member/email' ) . $lang . $template . '.php';
+		$template_path = trailingslashit( get_stylesheet_directory() . '/ultimate-member/email/' . $locale ) . $template . '.php';
 
 		// plugin location for default language.
-		if ( empty( $lang ) && ! file_exists( $template_path ) ) {
+		if ( empty( $locale ) && ! file_exists( $template_path ) ) {
 			$template_path = UM()->mail()->get_template_file( 'plugin', $template );
 		}
 
@@ -193,12 +190,10 @@ class Mail {
 			)
 		);
 
-		$language_name = is_object( $language ) ? $language->name : $code;
-
 		if ( file_exists( $template_path ) ) {
 
 			// translators: %s - language name.
-			$hint      = sprintf( __( 'Edit the translation in %s', 'polylang' ), $language_name );
+			$hint      = sprintf( __( 'Edit the translation in %s', 'polylang' ), $language->get_prop( 'name' ) );
 			$icon_html = sprintf(
 				'<a href="%1$s" title="%2$s" class="pll_icon_edit"><span class="screen-reader-text">%3$s</span></a>',
 				esc_url( $link ),
@@ -208,7 +203,7 @@ class Mail {
 		} else {
 
 			// translators: %s - language name.
-			$hint      = sprintf( __( 'Add a translation in %s', 'polylang' ), $language_name );
+			$hint      = sprintf( __( 'Add a translation in %s', 'polylang' ), $language->get_prop( 'name' ) );
 			$icon_html = sprintf(
 				'<a href="%1$s" title="%2$s" class="pll_icon_add"><span class="screen-reader-text">%3$s</span></a>',
 				esc_url( $link ),
