@@ -63,12 +63,10 @@ class Permalinks {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global object $polylang The Polylang instance.
 	 * @param  array $rules Rewrite rules.
 	 * @return array
 	 */
 	public function add_rewrite_rules( $rules ) {
-		global $polylang;
 
 		$languages = pll_languages_list();
 		$newrules  = array();
@@ -79,7 +77,7 @@ class Permalinks {
 			$account         = get_post( $account_page_id );
 
 			foreach ( $languages as $language ) {
-				if ( pll_default_language() === $language && $polylang->options['hide_default'] ) {
+				if ( pll_default_language() === $language && PLL()->options['hide_default'] ) {
 					continue;
 				}
 				$lang_post_id  = pll_get_post( $account_page_id, $language );
@@ -88,7 +86,7 @@ class Permalinks {
 				if ( isset( $account->post_name ) && isset( $lang_post_obj->post_name ) ) {
 					$lang_page_slug = $lang_post_obj->post_name;
 
-					if ( 1 === $polylang->options['force_lang'] ) {
+					if ( 1 === PLL()->options['force_lang'] ) {
 						$newrules[ $language . '/' . $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_tab=$matches[1]&lang=' . $language;
 					}
 
@@ -103,7 +101,7 @@ class Permalinks {
 			$user         = get_post( $user_page_id );
 
 			foreach ( $languages as $language ) {
-				if ( pll_default_language() === $language && $polylang->options['hide_default'] ) {
+				if ( pll_default_language() === $language && PLL()->options['hide_default'] ) {
 					continue;
 				}
 				$lang_post_id  = pll_get_post( $user_page_id, $language );
@@ -112,7 +110,7 @@ class Permalinks {
 				if ( isset( $user->post_name ) && isset( $lang_post_obj->post_name ) ) {
 					$lang_page_slug = $lang_post_obj->post_name;
 
-					if ( 1 === $polylang->options['force_lang'] ) {
+					if ( 1 === PLL()->options['force_lang'] ) {
 						$newrules[ $language . '/' . $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_user=$matches[1]&lang=' . $language;
 					}
 

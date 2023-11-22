@@ -1,14 +1,16 @@
 === Ultimate Member - Polylang ===
+
 Author: umdevelopera
 Author URI: https://github.com/umdevelopera
 Plugin URI: https://github.com/umdevelopera/um-polylang
 Tags: ultimate member, polylang, multilingual
-Requires at least: 6.0
-Tested up to: 6.3
-Stable tag: 1.0.2
+Requires at least: 5.5
+Tested up to: 6.4
+Requires UM core at least: 2.6.8
+Tested UM core up to: 2.7.0
+Stable tag: 1.0.3
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
-Requires UM core at least: 2.6.7
 
 == Description ==
 
@@ -20,13 +22,15 @@ Integrates the "Ultimate Member" community plugin with the "Polylang" multilingu
 * Ability to translate bio (description) field in profile.
 * Proper permalinks for the Account and User (profile) pages.
 
-== Installation ==
-
-You can install this plugin from the ZIP file as any other plugin. Follow this instruction: https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin
-
 = Documentation & Support =
 
 This is a free extension created for the community. The Ultimate Member team does not provide any support for this extension. Open new issue in the GitHub repository if you face a problem: https://github.com/umdevelopera/um-polylang/issues
+
+== Installation ==
+
+Download ZIP file from GitHub or Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
+
+You can install this plugin from the ZIP file as any other plugin. Follow this instruction: https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin
 
 == Changelog ==
 

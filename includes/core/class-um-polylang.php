@@ -58,6 +58,7 @@ class UM_Polylang {
 	 */
 	public function fields() {
 		if ( empty( UM()->classes['um_polylang_fields'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-fields.php';
 			UM()->classes['um_polylang_fields'] = new um_ext\um_polylang\core\Fields();
 		}
 		return UM()->classes['um_polylang_fields'];
@@ -71,6 +72,7 @@ class UM_Polylang {
 	 */
 	public function form() {
 		if ( empty( UM()->classes['um_polylang_form'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-form.php';
 			UM()->classes['um_polylang_form'] = new um_ext\um_polylang\core\Form();
 		}
 		return UM()->classes['um_polylang_form'];
@@ -84,6 +86,7 @@ class UM_Polylang {
 	 */
 	public function mail() {
 		if ( empty( UM()->classes['um_polylang_mail'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-mail.php';
 			UM()->classes['um_polylang_mail'] = new um_ext\um_polylang\core\Mail();
 		}
 		return UM()->classes['um_polylang_mail'];
@@ -97,6 +100,7 @@ class UM_Polylang {
 	 */
 	public function permalinks() {
 		if ( empty( UM()->classes['um_polylang_permalinks'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-permalinks.php';
 			UM()->classes['um_polylang_permalinks'] = new um_ext\um_polylang\core\Permalinks();
 		}
 		return UM()->classes['um_polylang_permalinks'];
@@ -108,12 +112,10 @@ class UM_Polylang {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global object $polylang The Polylang instance.
 	 * @param  string $field Optional, the language field to return (@see PLL_Language), defaults to `'slug'`.
 	 * @return string|int|bool|string[]|PLL_Language The requested field or object for the current language, `false` if the field isn't set.
 	 */
 	public function get_current( $field = 'slug' ) {
-		global $polylang;
 
 		$lang = pll_current_language();
 		if ( isset( $_GET['lang'] ) ) {
@@ -122,7 +124,7 @@ class UM_Polylang {
 		if ( empty( $lang ) || 'all' === $lang ) {
 			$lang = substr( get_locale(), 0, 2 );
 		}
-		$language = $polylang->model->get_language( $lang );
+		$language = PLL()->model->get_language( $lang );
 
 		return is_object( $language ) ? $language->get_prop( $field ) : $lang;
 	}
@@ -156,16 +158,13 @@ class UM_Polylang {
 	/**
 	 * Check if Polylang is active.
 	 *
-	 * @since 1.0.0
+	 * @since   1.0.0
+	 * @version 1.0.3 Check for the PLL function.
 	 *
 	 * @return boolean
 	 */
 	public function is_active() {
-		if ( defined( 'POLYLANG_VERSION' ) ) {
-			global $polylang;
-			return isset( $polylang ) && is_object( $polylang );
-		}
-		return false;
+		return defined( 'POLYLANG_VERSION' ) && function_exists( 'PLL' );
 	}
 
 
