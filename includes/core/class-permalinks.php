@@ -14,27 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Localize permalinks.
  *
+ * @version 1.0.3 static method `update_core_pages` removed.
+ *
  * @package um_ext\um_polylang\core
  */
 class Permalinks {
-
-	/**
-	 * Update meta for translated core pages.
-	 * This is needed because the 'um_is_core_page' filter was removed.
-	 */
-	public static function update_core_pages() {
-		$languages = pll_languages_list();
-		foreach ( $languages as $language ) {
-			foreach ( UM()->config()->permalinks as $page => $page_id ) {
-				$lang_post_id = pll_get_post( $page_id, $language );
-				if ( $lang_post_id && is_numeric( $lang_post_id ) && $lang_post_id !== $page_id ) {
-					update_post_meta( $lang_post_id, '_um_wpml_' . $page, 1 );
-					update_post_meta( $lang_post_id, '_icl_lang_duplicate_of', $page_id );
-				}
-			}
-		}
-	}
-
 
 	/**
 	 * Class Permalinks constructor.
@@ -42,9 +26,14 @@ class Permalinks {
 	public function __construct() {
 		add_filter( 'rewrite_rules_array', array( &$this, 'add_rewrite_rules' ), 10, 1 );
 
+		// Links in emails.
+		add_filter( 'um_activate_url', array( &$this, 'localize_activate_url' ), 10, 1 );
+
+		// Pages.
 		add_filter( 'um_get_core_page_filter', array( &$this, 'localize_core_page_url' ), 10, 3 );
 		add_filter( 'um_localize_permalink_filter', array( &$this, 'localize_profile_permalink' ), 10, 2 );
 
+		// Buttons.
 		add_filter( 'um_login_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
 		add_filter( 'um_register_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
 
@@ -119,16 +108,14 @@ class Permalinks {
 			}
 		}
 
-		// update core pages.
-		self::update_core_pages();
-
 		return array_merge( $newrules, $rules );
 	}
 
 	/**
 	 * Filter the link in the language switcher.
 	 *
-	 * @since 1.0.1
+	 * @since   1.0.1
+	 * @version 1.0.3 static method `update_core_pages` removed.
 	 *
 	 * @param string|null $url    The link, null if no translation was found.
 	 * @param string      $slug   The language code.
@@ -240,6 +227,25 @@ class Permalinks {
 		}
 
 		return $is_core_page;
+	}
+
+
+	/**
+	 * Filter account activation link.
+	 *
+	 * @hook  um_activate_url
+	 * @see   um\core\Permalinks::activate_url()
+	 * @since 1.0.3
+	 *
+	 * @param string $url Account activation link.
+	 *
+	 * @return string Localized account activation link.
+	 */
+	public function localize_activate_url( $url ){
+		if ( ! UM()->Polylang()->is_default() ) {
+			$url = add_query_arg( 'lang', UM()->Polylang()->get_current(), $url );
+		}
+		return $url;
 	}
 
 

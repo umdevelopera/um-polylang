@@ -43,11 +43,32 @@ class UM_Polylang {
 	 */
 	public function __construct() {
 		if ( $this->is_active() ) {
-			$this->fields();
-			$this->form();
 			$this->mail();
 			$this->permalinks();
+
+			if( UM()->is_ajax() ) {
+
+			} elseif ( UM()->is_request( 'admin' ) ) {
+				$this->admin();
+			} elseif ( UM()->is_request( 'frontend' ) ) {
+				$this->fields();
+				$this->form();
+			}
 		}
+	}
+
+
+	/**
+	 * Subclass that extends wp-admin features.
+	 *
+	 * @return um_ext\um_polylang\admin\Admin()
+	 */
+	public function admin() {
+		if ( empty( UM()->classes['um_polylang_admin'] ) ) {
+			require_once um_polylang_path . 'includes/admin/class-admin.php';
+			UM()->classes['um_polylang_admin'] = new um_ext\um_polylang\admin\Admin();
+		}
+		return UM()->classes['um_polylang_admin'];
 	}
 
 
@@ -104,6 +125,20 @@ class UM_Polylang {
 			UM()->classes['um_polylang_permalinks'] = new um_ext\um_polylang\core\Permalinks();
 		}
 		return UM()->classes['um_polylang_permalinks'];
+	}
+
+
+	/**
+	 * Subclass that setup pages and forms.
+	 *
+	 * @return um_ext\um_polylang\core\Setup()
+	 */
+	public function setup() {
+		if ( empty( UM()->classes['um_polylang_setup'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-setup.php';
+			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\core\Setup();
+		}
+		return UM()->classes['um_polylang_setup'];
 	}
 
 

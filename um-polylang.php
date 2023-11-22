@@ -34,13 +34,11 @@ define( 'um_polylang_requires', '2.7.0' );
 // Activation script.
 if ( ! function_exists( 'um_polylang_activation_hook' ) ) {
 	function um_polylang_activation_hook() {
-
-		// update core pages.
 		if ( function_exists( 'UM' ) && function_exists( 'pll_languages_list' ) ) {
-			require_once 'includes/core/class-permalinks.php';
-			if ( class_exists( 'um_ext\um_polylang\core\Permalinks' ) ) {
-				$permalinks = new um_ext\um_polylang\core\Permalinks();
-				flush_rewrite_rules();
+			require_once 'includes/core/class-setup.php';
+			if ( class_exists( 'um_ext\um_polylang\core\Setup' ) ) {
+				$setup = new um_ext\um_polylang\core\Setup();
+				$setup->run();
 			}
 		}
 	}
