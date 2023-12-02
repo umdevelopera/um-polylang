@@ -4,15 +4,17 @@ Integrates the **Ultimate Member** community plugin with the **Polylang** multil
 
 ## Key features
 
+- Localized permalinks for the Account and User (profile) pages.
+- Ability to duplicate Ultimate Member forms for all languages in one click.
+- Ability to duplicate Ultimate Member pages for all languages in one click.
 - Ability to translate email templates.
 - Ability to translate bio (description) field in profile.
-- Proper permalinks for the Account and User (profile) pages.
 
 ## Installation
 
 __Note:__ This plugin requires the [Ultimate Member](https://wordpress.org/plugins/ultimate-member/) and [Polylang](https://uk.wordpress.org/plugins/polylang/) plugins to be installed first.
 
-### Clone from GitHub
+### How to install from GitHub
 
 Open git bash, navigate to the **plugins** folder and execute this command:
 
@@ -20,9 +22,9 @@ Open git bash, navigate to the **plugins** folder and execute this command:
 
 Once the plugin is cloned, enter your site admin dashboard and go to _wp-admin > Plugins > Installed Plugins_. Find the "Ultimate Member - Polylang" plugin and click the "Activate" link.
 
-### Install from ZIP archive
+### How to install from ZIP archive
 
-You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/175PVG6tLK7z1wcrAawFfQdTVIC071Eup/view) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
+You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/1Lpgu5b-6CLkjK0Ik24CBB836aIcRcmaj/view) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
 
 ## How to use
 

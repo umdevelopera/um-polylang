@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Localize permalinks.
  *
- * @version 1.0.3 static method `update_core_pages` removed.
+ * @version 1.1.0 static method `update_core_pages` removed.
  *
  * @package um_ext\um_polylang\core
  */
@@ -115,7 +115,7 @@ class Permalinks {
 	 * Filter the link in the language switcher.
 	 *
 	 * @since   1.0.1
-	 * @version 1.0.3 static method `update_core_pages` removed.
+	 * @version 1.1.0 static method `update_core_pages` removed.
 	 *
 	 * @param string|null $url    The link, null if no translation was found.
 	 * @param string      $slug   The language code.
@@ -235,7 +235,7 @@ class Permalinks {
 	 *
 	 * @hook  um_activate_url
 	 * @see   um\core\Permalinks::activate_url()
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 *
 	 * @param string $url Account activation link.
 	 *

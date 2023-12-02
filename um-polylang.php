@@ -8,10 +8,12 @@
  * Text Domain: um-polylang
  * Domain Path: /languages
  *
- * Version: 1.0.3
+ * Version: 1.1.0
  * UM version: 2.7.0
  * Requires at least: 5.5
  * Requires PHP: 5.6
+ *
+ * @package UM Extended
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

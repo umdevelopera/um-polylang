@@ -42,24 +42,26 @@ class UM_Polylang {
 	 * Class UM_Polylang constructor.
 	 */
 	public function __construct() {
-		if ( $this->is_active() ) {
-			$this->mail();
-			$this->permalinks();
+		$this->mail();
+		$this->permalinks();
 
-			if( UM()->is_ajax() ) {
+		if( UM()->is_ajax() ) {
 
-			} elseif ( UM()->is_request( 'admin' ) ) {
-				$this->admin();
-			} elseif ( UM()->is_request( 'frontend' ) ) {
-				$this->fields();
-				$this->form();
-			}
+		} elseif ( UM()->is_request( 'admin' ) ) {
+			$this->admin();
+		} elseif ( UM()->is_request( 'frontend' ) ) {
+			$this->fields();
+			$this->form();
 		}
+
+		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
 	}
 
 
 	/**
 	 * Subclass that extends wp-admin features.
+	 *
+	 * @since 1.1.0
 	 *
 	 * @return um_ext\um_polylang\admin\Admin()
 	 */
@@ -131,6 +133,8 @@ class UM_Polylang {
 	/**
 	 * Subclass that setup pages and forms.
 	 *
+	 * @since 1.1.0
+	 *
 	 * @return um_ext\um_polylang\core\Setup()
 	 */
 	public function setup() {
@@ -139,6 +143,16 @@ class UM_Polylang {
 			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\core\Setup();
 		}
 		return UM()->classes['um_polylang_setup'];
+	}
+
+
+	/**
+	 * Loads a plugin's translated strings.
+	 */
+	public function textdomain() {
+		$locale = get_locale() ? get_locale() : 'en_US';
+		load_textdomain( um_polylang_textdomain, WP_LANG_DIR . '/plugins/' . um_polylang_textdomain . '-' . $locale . '.mo' );
+		load_plugin_textdomain( um_polylang_textdomain, false, dirname( um_polylang_plugin ) . '/languages/' );
 	}
 
 
@@ -181,7 +195,7 @@ class UM_Polylang {
 	/**
 	 * Returns the list of available languages.
 	 *
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 *
 	 * @return array
 	 */
@@ -194,7 +208,7 @@ class UM_Polylang {
 	 * Check if Polylang is active.
 	 *
 	 * @since   1.0.0
-	 * @version 1.0.3 Check for the PLL function.
+	 * @version 1.1.0 Check for the PLL function.
 	 *
 	 * @return boolean
 	 */
