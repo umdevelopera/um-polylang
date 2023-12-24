@@ -24,6 +24,8 @@ class Permalinks {
 	 * Class Permalinks constructor.
 	 */
 	public function __construct() {
+
+		// Add rewrite rules for the Account and User page.
 		add_filter( 'rewrite_rules_array', array( &$this, 'add_rewrite_rules' ), 10, 1 );
 
 		// Links in emails.
@@ -46,7 +48,7 @@ class Permalinks {
 
 
 	/**
-	 * Add UM rewrite rules for the Account page and Profile page.
+	 * Add rewrite rules for the Account and User page.
 	 *
 	 * @hook rewrite_rules_array
 	 *
@@ -110,6 +112,7 @@ class Permalinks {
 
 		return array_merge( $newrules, $rules );
 	}
+
 
 	/**
 	 * Filter the link in the language switcher.

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Ultimate Member - Polylang\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-03 23:01+0000\n"
-"PO-Revision-Date: 2023-12-03 23:01+0000\n"
+"PO-Revision-Date: 2023-12-24 19:26+0000\n"
 "Last-Translator: DeveloperA UltimateMember\n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -15,29 +15,31 @@ msgstr ""
 "X-Loco-Version: 2.6.6; wp-6.4.1\n"
 "X-Domain: um-polylang"
 
-#. %s: Plugin name.
-#: includes/admin/class-admin.php:134
+#. %1$s - plugin name, %2$s - a list of forms.
+#: includes/admin/class-admin.php:138
 #, php-format
 msgid ""
-"%s needs to create required forms for every language to function correctly."
+"%1$s needs to create required forms for every language to function correctly."
+" Forms that need translation: %2$s"
 msgstr ""
 
-#. %s: Plugin name.
-#: includes/admin/class-admin.php:203
+#. %1$s - plugin name, %2$s - a list of pages.
+#: includes/admin/class-admin.php:213
 #, php-format
 msgid ""
-"%s needs to create required pages for every language to function correctly."
+"%1$s needs to create required pages for every language to function correctly."
+" Pages that need translation: %2$s"
 msgstr ""
 
-#: includes/admin/class-admin.php:140
+#: includes/admin/class-admin.php:146
 msgid "Create Forms"
 msgstr ""
 
-#: includes/admin/class-admin.php:209
+#: includes/admin/class-admin.php:221
 msgid "Create Pages"
 msgstr ""
 
-#: includes/admin/class-admin.php:240
+#: includes/admin/class-admin.php:252
 msgid "Forms have been duplicated successfully."
 msgstr ""
 
@@ -53,11 +55,11 @@ msgstr ""
 msgid "Integrates Ultimate Member with Polylang."
 msgstr ""
 
-#: includes/admin/class-admin.php:141 includes/admin/class-admin.php:210
+#: includes/admin/class-admin.php:147 includes/admin/class-admin.php:222
 msgid "No thanks"
 msgstr ""
 
-#: includes/admin/class-admin.php:244
+#: includes/admin/class-admin.php:256
 msgid "Pages have been duplicated successfully."
 msgstr ""
 

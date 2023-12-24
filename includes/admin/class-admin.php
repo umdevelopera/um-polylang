@@ -30,6 +30,7 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			add_action( 'in_admin_header', array( $this, 'notice_create_forms' ) );
 			add_action( 'in_admin_header', array( $this, 'notice_create_pages' ) );
 			add_filter( 'um_adm_action_custom_notice_update', array( $this, 'notice_update' ), 10, 2 );
+			add_filter( 'um_adm_action_custom_update_notice', array( $this, 'notice_update' ), 10, 2 );
 
 			// Create Forms.
 			add_action( 'um_admin_do_action__um_pll_create_forms', array( $this, 'action_create_forms' ) );
@@ -60,7 +61,7 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			);
 			$posts = get_posts( $args );
 
-			UM()->Polylang()->setup()->create_posts( $posts, 'um_form' );
+			UM()->Polylang()->posts()->create_posts( $posts, 'um_form' );
 
 			$url = add_query_arg( 'update', 'um_pll_create_forms', admin_url( 'edit.php?post_type=um_form' ) );
 			exit( wp_safe_redirect( $url ) );
@@ -73,7 +74,7 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 		public function action_create_pages() {
 			$posts = UM()->config()->permalinks;
 
-			UM()->Polylang()->setup()->create_posts( $posts, 'page' );
+			UM()->Polylang()->posts()->create_posts( $posts, 'page' );
 
 			$url = add_query_arg( 'update', 'um_pll_create_pages', admin_url( 'edit.php?post_type=page' ) );
 			exit( wp_safe_redirect( $url ) );
@@ -95,6 +96,7 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			if ( empty( $languages ) ) {
 				return;
 			}
+			$def_lang = pll_default_language();
 
 			$args = array(
 				'fields'      => 'ids',
@@ -109,10 +111,12 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 
 			$need_translations = array();
 			foreach ( $posts as $post => $post_id ) {
+				if ( $def_lang !== pll_get_post_language( $post_id ) ) {
+					continue;
+				}
 				$post_translations = pll_get_post_translations( $post_id );
 				if ( array_diff( $languages, array_keys( $post_translations ) ) ) {
-					$need_translations[] = $post_id;
-					break;
+					$need_translations[ $post_id ] = get_the_title( $post_id );
 				}
 			}
 
@@ -129,10 +133,13 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 
 					<p>
 						<?php
-						// translators: %s: Plugin name.
-						echo wp_kses(
-							sprintf( __( '%s needs to create required forms for every language to function correctly.', 'um-polylang' ), UM_PLUGIN_NAME ),
-							UM()->get_allowed_html( 'admin_notice' )
+						// translators: %1$s - plugin name, %2$s - a list of forms.
+						echo esc_html(
+							sprintf(
+								__( '%1$s needs to create required forms for every language to function correctly. Forms that need translation: %2$s', 'um-polylang' ),
+								UM_PLUGIN_NAME,
+								implode( ', ', $need_translations )
+							)
 						);
 						?>
 					</p>
@@ -170,6 +177,7 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			if ( empty( $languages ) ) {
 				return;
 			}
+			$def_lang = pll_default_language();
 
 			$posts = UM()->config()->permalinks;
 			if ( empty( $posts ) ) {
@@ -178,10 +186,12 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 
 			$need_translations = array();
 			foreach ( $posts as $post => $post_id ) {
+				if ( $def_lang !== pll_get_post_language( $post_id ) ) {
+					continue;
+				}
 				$post_translations = pll_get_post_translations( $post_id );
 				if ( array_diff( $languages, array_keys( $post_translations ) ) ) {
-					$need_translations[] = $post_id;
-					break;
+					$need_translations[ $post_id ] = get_the_title( $post_id );
 				}
 			}
 
@@ -198,10 +208,13 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 
 				<p>
 					<?php
-					// translators: %s: Plugin name.
-					echo wp_kses(
-						sprintf( __( '%s needs to create required pages for every language to function correctly.', 'um-polylang' ), UM_PLUGIN_NAME ),
-						UM()->get_allowed_html( 'admin_notice' )
+					// translators: %1$s - plugin name, %2$s - a list of pages.
+					echo esc_html(
+						sprintf(
+							__( '%1$s needs to create required pages for every language to function correctly. Pages that need translation: %2$s', 'um-polylang' ),
+							UM_PLUGIN_NAME,
+							implode( ', ', $need_translations )
+						)
 					);
 					?>
 				</p>

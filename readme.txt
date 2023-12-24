@@ -5,16 +5,16 @@ Author URI: https://github.com/umdevelopera
 Plugin URI: https://github.com/umdevelopera/um-polylang
 Tags: ultimate member, polylang, multilingual
 Requires at least: 5.5
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 Requires UM core at least: 2.6.8
-Tested UM core up to: 2.7.0
-Stable tag: 1.1.0
+Tested UM core up to: 2.8.1
+Stable tag: 1.1.1
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
 == Description ==
 
-Integrates the "Ultimate Member" community plugin with the "Polylang" multilingual plugin.
+Integrates the "Ultimate Member" plugin with the "Polylang" plugin. Makes UM multilingual.
 
 = Key Features =
 
@@ -26,15 +26,23 @@ Integrates the "Ultimate Member" community plugin with the "Polylang" multilingu
 
 = Documentation & Support =
 
-This is a free extension created for the community. The Ultimate Member team does not provide any support for this extension. Open new issue in the GitHub repository if you face a problem: https://github.com/umdevelopera/um-polylang/issues
+This is a free extension created for the community. The Ultimate Member team does not provide support for this extension.
+Open new issue in the GitHub repository if you are facing a problem or have a suggestion: https://github.com/umdevelopera/um-polylang/issues
+Documentation is the README section in the GitHub repository: https://github.com/umdevelopera/um-polylang
 
 == Installation ==
 
-Download ZIP file from GitHub or Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
-
 You can install this plugin from the ZIP file as any other plugin. Follow this instruction: https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin
 
+Download ZIP file from GitHub or Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
+
 == Changelog ==
+
+= 1.1.1: December 24, 2023 =
+
+* Tweak: Displays forms/posts that need translation in the notice.
+* Tweak: Copy fields to the draft when translating a form manually.
+* Tweak: Automatically flush rewrite rules after bulk pages creation.
 
 = 1.1.0: December 4, 2023 =
 
