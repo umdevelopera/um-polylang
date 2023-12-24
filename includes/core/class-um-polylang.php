@@ -49,6 +49,7 @@ class UM_Polylang {
 
 		} elseif ( UM()->is_request( 'admin' ) ) {
 			$this->admin();
+			$this->posts();
 		} elseif ( UM()->is_request( 'frontend' ) ) {
 			$this->fields();
 			$this->form();
@@ -131,7 +132,23 @@ class UM_Polylang {
 
 
 	/**
-	 * Subclass that setup pages and forms.
+	 * Subclass that creates translated posts and forms.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @return um_ext\um_polylang\core\Posts()
+	 */
+	public function posts() {
+		if ( empty( UM()->classes['um_polylang_posts'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-posts.php';
+			UM()->classes['um_polylang_posts'] = new um_ext\um_polylang\core\Posts();
+		}
+		return UM()->classes['um_polylang_posts'];
+	}
+
+
+	/**
+	 * Subclass that do actions on installation.
 	 *
 	 * @since 1.1.0
 	 *
