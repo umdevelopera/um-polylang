@@ -45,10 +45,15 @@ Image - Permalink settings.
 
 Go to *wp-admin > Ultimate Member > Forms* to translate Ultimate Member forms. Click the **Create Forms** button in the notice to duplicate Ultimate Member forms for all languages. Or click the "+" icon unter the flag to duplicate each form manually.
 
-Once forms for languages are created you can open these forms and translate fields. You have to translate a **Label** for custom fields. You also can translate **Placeholder** and **Help Text** if needed.
-
 Image - Translate forms.
 ![Forms](https://github.com/umdevelopera/um-polylang/assets/113178913/76763122-a774-4778-ab2c-748b3e983779)
+
+Once forms for languages are created you can open these forms and translate fields. You have to translate a **Label** for custom fields. You also can translate **Placeholder** and **Help Text** if needed.
+
+**Choices** are not translatable to let searching and filtering in the directory work. You can use a workaround based on the [Choices Callback](https://docs.ultimatemember.com/article/1539-choices-callback-feature-in-um-2-1) feature to translate them. This feature uses a custom function to get an array of options for the field. You can verify a language inside the function to return an array with translated values. Keys must be the same.
+See example [here](https://gist.github.com/umdevelopera/bcc8c882ead5914845b489ece73b612d).
+
+![UM Forms, Edit Form, Edit Field - Dropdown (use Choices Callback to translate values)+](https://github.com/umdevelopera/um-polylang/assets/113178913/4e58118e-a9b4-430a-ba02-cb766ec72c6a)
 
 ### How to translate E-mails
 
