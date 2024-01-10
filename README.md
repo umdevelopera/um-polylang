@@ -50,7 +50,7 @@ Image - Translate forms.
 
 Once forms for languages are created you can open these forms and translate fields. You have to translate a **Label** for custom fields. You also can translate **Placeholder** and **Help Text** if needed.
 
-**Choices** are not translatable to let searching and filtering in the directory work. You can use custom functions to translate choices.
+**Choices** are not translatable, this is necessary for the directory search to work correctly. Don't try to translate choices in the field settings! You can use custom functions to translate choices.
 See examples:
 - [How to translate choices of the Checkbox field](https://gist.github.com/umdevelopera/f7b0e07d5db870c9ce9fc1e513224e45)
 - [How to translate choices of the Dropdown field](https://gist.github.com/umdevelopera/bcc8c882ead5914845b489ece73b612d)
