@@ -50,8 +50,10 @@ Image - Translate forms.
 
 Once forms for languages are created you can open these forms and translate fields. You have to translate a **Label** for custom fields. You also can translate **Placeholder** and **Help Text** if needed.
 
-**Choices** are not translatable to let searching and filtering in the directory work. You can use a workaround based on the [Choices Callback](https://docs.ultimatemember.com/article/1539-choices-callback-feature-in-um-2-1) feature to translate them. This feature uses a custom function to get an array of options for the field. You can verify a language inside the function to return an array with translated values. Keys must be the same.
-See example [here](https://gist.github.com/umdevelopera/bcc8c882ead5914845b489ece73b612d).
+**Choices** are not translatable to let searching and filtering in the directory work. You can use custom functions to translate choices.
+See examples:
+- [How to translate choices of the Checkbox field](https://gist.github.com/umdevelopera/f7b0e07d5db870c9ce9fc1e513224e45)
+- [How to translate choices of the Dropdown field](https://gist.github.com/umdevelopera/bcc8c882ead5914845b489ece73b612d)
 
 ![UM Forms, Edit Form, Edit Field - Dropdown (use Choices Callback to translate values)+](https://github.com/umdevelopera/um-polylang/assets/113178913/4e58118e-a9b4-430a-ba02-cb766ec72c6a)
 
