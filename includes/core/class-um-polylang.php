@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The "Ultimate Member - Polylang" extension initialization.
  *
+ * How to call: UM()->Polylang()
+ *
  * @package um_ext\um_polylang\core
  */
 class UM_Polylang {
@@ -53,6 +55,7 @@ class UM_Polylang {
 		} elseif ( UM()->is_request( 'frontend' ) ) {
 			$this->fields();
 			$this->form();
+			$this->shortcodes();
 		}
 
 		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
@@ -160,6 +163,22 @@ class UM_Polylang {
 			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\core\Setup();
 		}
 		return UM()->classes['um_polylang_setup'];
+	}
+
+
+	/**
+	 * Subclass that add shortcodes.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return um_ext\um_polylang\core\Shortcodes()
+	 */
+	public function shortcodes() {
+		if ( empty( UM()->classes['um_polylang_shortcodes'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-shortcodes.php';
+			UM()->classes['um_polylang_shortcodes'] = new um_ext\um_polylang\core\Shortcodes();
+		}
+		return UM()->classes['um_polylang_shortcodes'];
 	}
 
 
