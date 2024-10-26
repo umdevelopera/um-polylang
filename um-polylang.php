@@ -8,12 +8,12 @@
  * Text Domain: um-polylang
  * Domain Path: /languages
  *
- * Version: 1.1.1
- * UM version: 2.7.0
- * Requires at least: 5.5
- * Requires PHP: 5.6
+ * Requires at least: 6.5
+ * Requires PHP: 7.4
+ * UM version: 2.8.9
+ * Version: 1.2.0
  *
- * @package UM Tools
+ * @package um_ext\um_polylang
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-$plugin_data = get_plugin_data( __FILE__ );
+$plugin_data = get_plugin_data( __FILE__, true, false );
 
 define( 'um_polylang_url', plugin_dir_url( __FILE__ ) );
 define( 'um_polylang_path', plugin_dir_path( __FILE__ ) );
@@ -30,13 +30,13 @@ define( 'um_polylang_plugin', plugin_basename( __FILE__ ) );
 define( 'um_polylang_extension', $plugin_data['Name'] );
 define( 'um_polylang_version', $plugin_data['Version'] );
 define( 'um_polylang_textdomain', 'um-polylang' );
-define( 'um_polylang_requires', '2.7.0' );
 
 
 // Activation script.
 if ( ! function_exists( 'um_polylang_activation_hook' ) ) {
 	function um_polylang_activation_hook() {
 		if ( function_exists( 'UM' ) && function_exists( 'pll_languages_list' ) ) {
+			require_once 'includes/admin/class-admin.php';
 			require_once 'includes/core/class-setup.php';
 			if ( class_exists( 'um_ext\um_polylang\core\Setup' ) ) {
 				$setup = new um_ext\um_polylang\core\Setup();

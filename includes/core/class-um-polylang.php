@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The "Ultimate Member - Polylang" extension initialization.
  *
+ * How to call: UM()->Polylang()
+ *
  * @package um_ext\um_polylang\core
  */
 class UM_Polylang {
@@ -53,9 +55,16 @@ class UM_Polylang {
 		} elseif ( UM()->is_request( 'frontend' ) ) {
 			$this->fields();
 			$this->form();
+			$this->shortcodes();
 		}
 
-		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
+		// Extensions.
+		if ( defined( 'um_account_tabs_version' ) ) {
+			require_once um_polylang_path . 'includes/extensions/account-tabs.php';
+		}
+		if ( defined( 'um_profile_tabs_version' ) ) {
+			require_once um_polylang_path . 'includes/extensions/profile-tabs.php';
+		}
 	}
 
 
@@ -164,12 +173,18 @@ class UM_Polylang {
 
 
 	/**
-	 * Loads a plugin's translated strings.
+	 * Subclass that add shortcodes.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return um_ext\um_polylang\core\Shortcodes()
 	 */
-	public function textdomain() {
-		$locale = get_locale() ? get_locale() : 'en_US';
-		load_textdomain( um_polylang_textdomain, WP_LANG_DIR . '/plugins/' . um_polylang_textdomain . '-' . $locale . '.mo' );
-		load_plugin_textdomain( um_polylang_textdomain, false, dirname( um_polylang_plugin ) . '/languages/' );
+	public function shortcodes() {
+		if ( empty( UM()->classes['um_polylang_shortcodes'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-shortcodes.php';
+			UM()->classes['um_polylang_shortcodes'] = new um_ext\um_polylang\core\Shortcodes();
+		}
+		return UM()->classes['um_polylang_shortcodes'];
 	}
 
 

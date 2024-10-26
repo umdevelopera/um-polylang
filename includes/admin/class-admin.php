@@ -21,6 +21,18 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 	 */
 	class Admin {
 
+		const NOTICES = array(
+			'um_pll_create_forms',
+			'um_pll_create_pages',
+			'um_pll_create_account_tabs',
+			'um_pll_create_profile_tabs',
+		);
+
+		const POST_TYPES = array(
+			'um_form'         => 'um_form',
+			'um_account_tabs' => 'um_account_tabs',
+			'um_profile_tabs' => 'um_profile_tabs',
+		);
 
 		/**
 		 * Admin constructor.
@@ -110,8 +122,11 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			}
 
 			$need_translations = array();
-			foreach ( $posts as $post => $post_id ) {
-				if ( $def_lang !== pll_get_post_language( $post_id ) ) {
+			foreach ( $posts as $post_id ) {
+				$cur_lang = pll_get_post_language( $post_id );
+				if ( false === $cur_lang ) {
+					pll_set_post_language( $post_id, PLL()->pref_lang );
+				} elseif ( $def_lang !== $cur_lang ) {
 					continue;
 				}
 				$post_translations = pll_get_post_translations( $post_id );
@@ -121,43 +136,41 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			}
 
 			if ( $need_translations ) {
-					$url_params = array(
-						'um_adm_action'	 => 'um_pll_create_forms',
-						'_wpnonce'			 => wp_create_nonce( 'um_pll_create_forms' ),
-					);
+				$url_params = array(
+					'um_adm_action'	 => 'um_pll_create_forms',
+					'_wpnonce'			 => wp_create_nonce( 'um_pll_create_forms' ),
+				);
 
-					$url = add_query_arg( $url_params );
+				$url = add_query_arg( $url_params );
 
-					ob_start();
-					?>
-
-					<p>
-						<?php
-						// translators: %1$s - plugin name, %2$s - a list of forms.
-						echo esc_html(
-							sprintf(
-								__( '%1$s needs to create required forms for every language to function correctly. Forms that need translation: %2$s', 'um-polylang' ),
-								UM_PLUGIN_NAME,
-								implode( ', ', $need_translations )
-							)
-						);
-						?>
-					</p>
-					<p>
-						<a href="<?php echo esc_url( $url ); ?>" class="button button-primary"><?php esc_html_e( 'Create Forms', 'um-polylang' ); ?></a>
-						<a href="javascript:void(0);" class="button-secondary um_secondary_dismiss"><?php esc_html_e( 'No thanks', 'um-polylang' ); ?></a>
-					</p>
-
+				ob_start();
+				?>
+				<p>
 					<?php
-					$message = ob_get_clean();
-
-					$notice_data = array(
-						'class'				 => 'notice-warning',
-						'message'			 => $message,
-						'dismissible'	 => true,
+					// translators: %1$s - plugin name, %2$s - a list of forms.
+					echo esc_html(
+						sprintf(
+							__( '%1$s needs to create required forms for every language to function correctly. Forms that need translation: %2$s', 'um-polylang' ),
+							UM_PLUGIN_NAME,
+							implode( ', ', $need_translations )
+						)
 					);
+					?>
+				</p>
+				<p>
+					<a href="<?php echo esc_url( $url ); ?>" class="button button-primary"><?php esc_html_e( 'Create Forms', 'um-polylang' ); ?></a>
+					<a href="javascript:void(0);" class="button-secondary um_secondary_dismiss"><?php esc_html_e( 'No thanks', 'um-polylang' ); ?></a>
+				</p>
+				<?php
+				$message = ob_get_clean();
 
-					UM()->admin()->notices()->add_notice( 'um_pll_create_forms', $notice_data, 20 );
+				$notice_data = array(
+					'class'				 => 'notice-warning',
+					'message'			 => $message,
+					'dismissible'	 => true,
+				);
+
+				UM()->admin()->notices()->add_notice( 'um_pll_create_forms', $notice_data, 20 );
 			}
 		}
 
@@ -205,7 +218,6 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 
 				ob_start();
 				?>
-
 				<p>
 					<?php
 					// translators: %1$s - plugin name, %2$s - a list of pages.
@@ -222,7 +234,6 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 					<a href="<?php echo esc_url( $url ); ?>" class="button button-primary"><?php esc_html_e( 'Create Pages', 'um-polylang' ); ?></a>
 					<a href="javascript:void(0);" class="button-secondary um_secondary_dismiss"><?php esc_html_e( 'No thanks', 'um-polylang' ); ?></a>
 				</p>
-
 				<?php
 				$message = ob_get_clean();
 
@@ -271,8 +282,8 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 		 * @return string[] List of post type names.
 		 */
 		public function pll_get_post_types( $post_types, $is_settings ) {
-			$post_types['um_form'] = 'um_form';
-			return array_unique( $post_types );
+			$um_post_types = (array) apply_filters( 'um_pll_get_post_types', self::POST_TYPES, $is_settings );
+			return array_merge( $post_types, $um_post_types );
 		}
 
 
