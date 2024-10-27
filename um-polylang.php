@@ -30,7 +30,7 @@ define( 'um_polylang_plugin', plugin_basename( __FILE__ ) );
 define( 'um_polylang_extension', $plugin_data['Name'] );
 define( 'um_polylang_version', $plugin_data['Version'] );
 define( 'um_polylang_textdomain', 'um-polylang' );
-define( 'um_polylang_requires', '2.7.0' );
+//define( 'um_polylang_requires', '2.7.0' );
 
 
 // Activation script.

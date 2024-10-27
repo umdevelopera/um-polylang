@@ -58,6 +58,11 @@ class UM_Polylang {
 			$this->shortcodes();
 		}
 
+		// Extensions.
+		if ( defined( 'um_account_tabs_version' ) ) {
+			require_once um_polylang_path . 'includes/extensions/account-tabs.php';
+		}
+
 		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
 	}
 
