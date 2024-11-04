@@ -21,11 +21,18 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 	 */
 	class Admin {
 
+		const NOTICES = array(
+			'um_pll_create_forms',
+			'um_pll_create_pages',
+			'um_pll_create_account_tabs',
+			'um_pll_create_profile_tabs',
+		);
+
 		const POST_TYPES = array(
 			'um_form'         => 'um_form',
 			'um_account_tabs' => 'um_account_tabs',
+			'um_profile_tabs' => 'um_profile_tabs',
 		);
-
 
 		/**
 		 * Admin constructor.
@@ -115,8 +122,11 @@ if ( ! class_exists( 'um_ext\um_polylang\admin\Admin' ) ) {
 			}
 
 			$need_translations = array();
-			foreach ( $posts as $post => $post_id ) {
-				if ( $def_lang !== pll_get_post_language( $post_id ) ) {
+			foreach ( $posts as $post_id ) {
+				$cur_lang = pll_get_post_language( $post_id );
+				if ( false === $cur_lang ) {
+					pll_set_post_language( $post_id, PLL()->pref_lang );
+				} elseif ( $def_lang !== $cur_lang ) {
 					continue;
 				}
 				$post_translations = pll_get_post_translations( $post_id );

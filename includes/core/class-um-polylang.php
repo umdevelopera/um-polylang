@@ -62,6 +62,9 @@ class UM_Polylang {
 		if ( defined( 'um_account_tabs_version' ) ) {
 			require_once um_polylang_path . 'includes/extensions/account-tabs.php';
 		}
+		if ( defined( 'um_profile_tabs_version' ) ) {
+			require_once um_polylang_path . 'includes/extensions/profile-tabs.php';
+		}
 
 		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
 	}

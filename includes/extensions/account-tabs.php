@@ -84,7 +84,10 @@ function um_polylang_account_tabs_notice() {
 
 	$need_translations = array();
 	foreach ( $posts as $post => $post_id ) {
-		if ( $def_lang !== pll_get_post_language( $post_id ) ) {
+		$cur_lang = pll_get_post_language( $post_id );
+		if ( false === $cur_lang ) {
+			pll_set_post_language( $post_id, PLL()->pref_lang );
+		} elseif ( $def_lang !== $cur_lang ) {
 			continue;
 		}
 		$post_translations = pll_get_post_translations( $post_id );
