@@ -65,8 +65,6 @@ class UM_Polylang {
 		if ( defined( 'um_profile_tabs_version' ) ) {
 			require_once um_polylang_path . 'includes/extensions/profile-tabs.php';
 		}
-
-		add_action( 'plugins_loaded', array( $this, 'textdomain' ), 9 );
 	}
 
 
@@ -187,16 +185,6 @@ class UM_Polylang {
 			UM()->classes['um_polylang_shortcodes'] = new um_ext\um_polylang\core\Shortcodes();
 		}
 		return UM()->classes['um_polylang_shortcodes'];
-	}
-
-
-	/**
-	 * Loads a plugin's translated strings.
-	 */
-	public function textdomain() {
-		$locale = get_locale() ? get_locale() : 'en_US';
-		load_textdomain( um_polylang_textdomain, WP_LANG_DIR . '/plugins/' . um_polylang_textdomain . '-' . $locale . '.mo' );
-		load_plugin_textdomain( um_polylang_textdomain, false, dirname( um_polylang_plugin ) . '/languages/' );
 	}
 
 
