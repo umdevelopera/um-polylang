@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ultimate Member - Polylang\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 19:26+0000\n"
+"POT-Creation-Date: 2024-11-10 20:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Domain: um-polylang"
 
 #. %1$s - plugin name, %2$s - a list of forms.
-#: includes/admin/class-admin.php:138
+#: includes/admin/class-admin.php:153
 #, php-format
 msgid ""
 "%1$s needs to create required forms for every language to function correctly."
@@ -25,22 +25,36 @@ msgid ""
 msgstr ""
 
 #. %1$s - plugin name, %2$s - a list of pages.
-#: includes/admin/class-admin.php:213
+#: includes/admin/class-admin.php:226
 #, php-format
 msgid ""
 "%1$s needs to create required pages for every language to function correctly."
 " Pages that need translation: %2$s"
 msgstr ""
 
-#: includes/admin/class-admin.php:146
+#: includes/admin/class-admin.php:161
 msgid "Create Forms"
 msgstr ""
 
-#: includes/admin/class-admin.php:221
+#: includes/admin/class-admin.php:234
 msgid "Create Pages"
 msgstr ""
 
-#: includes/admin/class-admin.php:252
+#: includes/extensions/account-tabs.php:121
+#: includes/extensions/profile-tabs.php:121
+msgid "Create Tabs"
+msgstr ""
+
+#. %1$s - a list of tabs.
+#: includes/extensions/account-tabs.php:114
+#: includes/extensions/profile-tabs.php:114
+#, php-format
+msgid ""
+"Extension needs to create tabs for every language to function correctly. "
+"Tabs that need translation: %1$s"
+msgstr ""
+
+#: includes/admin/class-admin.php:264
 msgid "Forms have been duplicated successfully."
 msgstr ""
 
@@ -56,12 +70,19 @@ msgstr ""
 msgid "Integrates Ultimate Member with Polylang."
 msgstr ""
 
-#: includes/admin/class-admin.php:147 includes/admin/class-admin.php:222
+#: includes/admin/class-admin.php:162 includes/admin/class-admin.php:235
+#: includes/extensions/account-tabs.php:122
+#: includes/extensions/profile-tabs.php:122
 msgid "No thanks"
 msgstr ""
 
-#: includes/admin/class-admin.php:256
+#: includes/admin/class-admin.php:268
 msgid "Pages have been duplicated successfully."
+msgstr ""
+
+#: includes/extensions/account-tabs.php:148
+#: includes/extensions/profile-tabs.php:148
+msgid "Tabs have been duplicated successfully."
 msgstr ""
 
 #. %s - plugin name.

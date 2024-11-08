@@ -41,7 +41,7 @@ Download ZIP file from GitHub or Google Drive. You can find download links here:
 
 == Changelog ==
 
-= 1.2.0: November 9, 2024 =
+= 1.2.0: November 10, 2024 =
 
 * Enhancements:
 

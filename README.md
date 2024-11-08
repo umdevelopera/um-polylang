@@ -27,7 +27,7 @@ Once the plugin is cloned, enter your site admin dashboard and go to _wp-admin >
 
 ### How to install from ZIP archive
 
-You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/17n3Kr05_B_edsGY7An7xu85TZ7H5gbOT/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
+You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/1rj0W6639PMrFQqLfeCZXhoYgRcnCac8d/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
 
 ## How to use
 
@@ -77,7 +77,7 @@ Image - Translate forms.
 
 Once forms for languages are created you can open these forms and translate fields. You have to translate a **Label** for custom fields. You also can translate **Placeholder** and **Help Text** if needed.
 
-__Note:__ Choices in the Checkbox, Radio, Dropdown and Multi-Select fields are not translatable. This is necessary for the directory filters to work correctly. Don't try to translate choices in the field settings! 
+__Note:__ Choices in the Checkbox, Radio, Dropdown and Multi-Select fields are not translatable. This is necessary for the directory filters to work correctly. Don't try to translate choices in the field settings!
 You can use custom functions to translate choices. See examples here:
 - [How to translate choices of the Checkbox field](https://gist.github.com/umdevelopera/f7b0e07d5db870c9ce9fc1e513224e45)
 - [How to translate choices of the Dropdown field](https://gist.github.com/umdevelopera/bcc8c882ead5914845b489ece73b612d)

@@ -8,10 +8,10 @@
  * Text Domain: um-polylang
  * Domain Path: /languages
  *
- * Version: 1.2.0
- * UM version: 2.8.9
  * Requires at least: 6.5
  * Requires PHP: 7.4
+ * UM version: 2.8.9
+ * Version: 1.2.0
  *
  * @package um_ext\um_polylang
  */
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-$plugin_data = get_plugin_data( __FILE__ );
+$plugin_data = get_plugin_data( __FILE__, true, false );
 
 define( 'um_polylang_url', plugin_dir_url( __FILE__ ) );
 define( 'um_polylang_path', plugin_dir_path( __FILE__ ) );
