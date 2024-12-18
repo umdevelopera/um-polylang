@@ -34,6 +34,10 @@ class Permalinks {
 		// Pages.
 		add_filter( 'um_get_core_page_filter', array( &$this, 'localize_core_page_url' ), 10, 3 );
 		add_filter( 'um_localize_permalink_filter', array( &$this, 'localize_profile_permalink' ), 10, 2 );
+		add_filter( 'page_link', array( $this, 'localize_core_page_link' ), 10, 2 );
+
+		// Logout.
+		add_action( 'template_redirect', array( $this, 'localize_logout_page' ), 9990 );
 
 		// Buttons.
 		add_filter( 'um_login_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
@@ -50,7 +54,7 @@ class Permalinks {
 	/**
 	 * Add rewrite rules for the Account and User page.
 	 *
-	 * @hook rewrite_rules_array
+	 * @hooked rewrite_rules_array
 	 *
 	 * @since 1.0.0
 	 *
@@ -210,7 +214,7 @@ class Permalinks {
 	/**
 	 * Check if the current page is a UM Core Page or not.
 	 *
-	 * @hook   um_is_core_page
+	 * @hooked um_is_core_page
 	 *
 	 * @since 1.0.0
 	 * @deprecated since version 1.0.1
@@ -236,26 +240,48 @@ class Permalinks {
 	/**
 	 * Filter account activation link.
 	 *
-	 * @hook  um_activate_url
-	 * @see   um\core\Permalinks::activate_url()
+	 * @hooked um_activate_url
+	 *
+	 * @see um\core\Permalinks
 	 * @since 1.1.0
 	 *
 	 * @param string $url Account activation link.
-	 *
 	 * @return string Localized account activation link.
 	 */
 	public function localize_activate_url( $url ){
 		if ( ! UM()->Polylang()->is_default() ) {
 			$url = add_query_arg( 'lang', UM()->Polylang()->get_current(), $url );
-		}
+			}
 		return $url;
+	}
+
+
+	/**
+	 * Filter logout page URL.
+	 *
+	 * @hooked page_link
+	 *
+	 * @since version 1.2.1
+	 *
+	 * @param  string $link    The page's permalink.
+	 * @param  int    $post_id The ID of the page.
+	 * @return string The page permalink.
+	 */
+	public function localize_core_page_link( $link, $post_id ) {
+		if ( ! UM()->Polylang()->is_default() ) {
+			if ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) ) {
+				$url  = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
+				$link = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
+			}
+		}
+		return $link;
 	}
 
 
 	/**
 	 * Filter core page URL.
 	 *
-	 * @hook um_get_core_page_filter
+	 * @hooked um_get_core_page_filter
 	 *
 	 * @since 1.0.0
 	 *
@@ -277,10 +303,44 @@ class Permalinks {
 
 
 	/**
+	 * The logout redirect URL.
+	 *
+	 * @hooked template_redirect - 9990
+	 *
+	 * @see \um\core\Logout
+	 * @since version 1.2.1
+	 */
+	public function localize_logout_page() {
+		if ( is_user_logged_in() && um_is_core_page( 'logout' ) && empty( $_REQUEST['redirect_to'] ) ) {
+			$lang = UM()->Polylang()->get_current();
+
+			if ( 'redirect_home' === um_user( 'after_logout' ) ) {
+				// if "Action to be taken after logout" is set to "Go to Homepage".
+
+				$link = home_url();
+				$url  = PLL()->links->get_home_url( $lang );
+				$_REQUEST['redirect_to'] = ( $link !== $url ) ? $url : add_query_arg( 'lang', $lang, $url );
+
+			} elseif( 'redirect_url' === um_user( 'after_logout' ) ) {
+				// if "Action to be taken after logout" is set to "Go to Custom URL".
+
+				$redirect_url = apply_filters( 'um_logout_redirect_url', um_user( 'logout_redirect_url' ), um_user( 'ID' ) );
+				$page_path    = trim( str_replace( home_url(), '', $redirect_url ), " \t\n\r\0\x0B/\\" );
+				$page         = get_page_by_path( $page_path );
+				if ( is_object( $page ) ) {
+					$redirect_to = $this->get_page_url_for_language( $page->ID, $lang );
+					$_REQUEST['redirect_to'] = $redirect_to;
+				}
+			}
+		}
+	}
+
+
+	/**
 	 * Filter page URL on buttons.
 	 *
-	 * @hook um_login_form_button_two_url
-	 * @hook um_register_form_button_two_url
+	 * @hooked um_login_form_button_two_url
+	 * @hooked um_register_form_button_two_url
 	 *
 	 * @since 1.0.0
 	 *
@@ -300,7 +360,7 @@ class Permalinks {
 	/**
 	 * Filter profile page URL.
 	 *
-	 * @hook um_localize_permalink_filter
+	 * @hooked um_localize_permalink_filter
 	 *
 	 * @since 1.0.0
 	 *
