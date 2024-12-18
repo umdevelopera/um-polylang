@@ -4,13 +4,14 @@ Author: umdevelopera
 Author URI: https://github.com/umdevelopera
 Plugin URI: https://github.com/umdevelopera/um-polylang
 Tags: ultimate member, polylang, multilingual
-Requires at least: 6.5
-Tested up to: 6.7
-Requires UM core at least: 2.6.8
-Tested UM core up to: 2.9.1
-Stable tag: 1.2.0
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
+
+Requires at least: 6.5
+Tested up to: 6.7.1
+Requires UM core at least: 2.6.8
+Tested UM core up to: 2.9.1
+Stable tag: 1.2.1
 
 == Description ==
 
@@ -19,7 +20,8 @@ Integrates the "Ultimate Member" plugin with the "Polylang" plugin. Makes UM mul
 = Key Features =
 
 * Language switcher shortcode. Displays the Polylang language switcher where you need it.
-* Localized permalinks for the Account and User (profile) pages.
+* Adds rewrite rules for localized Account and User (profile) pages.
+* Localize links for Ultimate Member pages in menu.
 * Ability to duplicate Ultimate Member pages for all languages in one click.
 * Ability to duplicate Ultimate Member forms for all languages in one click.
 * Ability to translate email templates.
@@ -40,6 +42,13 @@ You can install this plugin from the ZIP file as any other plugin. Follow this i
 Download ZIP file from GitHub or Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
 
 == Changelog ==
+
+= 1.2.1: December 18, 2024 =
+
+* Enhancements:
+
+	- Tweak: The core page links are localized using the `page_link` hook.
+	- Tweak: The logout redirect URL is localized.
 
 = 1.2.0: November 10, 2024 =
 
