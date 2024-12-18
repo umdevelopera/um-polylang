@@ -5,7 +5,8 @@ Integrates the **Ultimate Member** plugin with the **Polylang** plugin. Makes Ul
 ## Key features
 
 - Language switcher shortcode. Display the Polylang language switcher where you need it.
-- Localize permalinks for the Account and User (profile) pages.
+- Adds rewrite rules for localized Account and User (profile) pages.
+- Localize links for Ultimate Member pages in menu.
 - Ability to duplicate Ultimate Member pages for all languages in one click.
 - Ability to duplicate Ultimate Member forms for all languages in one click.
 - Ability to translate email templates.
@@ -27,7 +28,7 @@ Once the plugin is cloned, enter your site admin dashboard and go to _wp-admin >
 
 ### How to install from ZIP archive
 
-You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/1rj0W6639PMrFQqLfeCZXhoYgRcnCac8d/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
+You can install this plugin from the [ZIP archive](https://drive.google.com/file/d/1K5DMJYQtof32NftqDat9ACc0wNqIbmNa/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
 
 ## How to use
 
@@ -114,12 +115,14 @@ Image - Translate profile tabs.
 This is a free extension created for the community. The Ultimate Member team does not provide support for this extension.
 Open new [issue](https://github.com/umdevelopera/um-polylang/issues) if you are facing a problem or have a suggestion.
 
-## Related links
+**Please give a star if you think this extension is useful. I wish to know how many people use it. Thanks.**
 
-Ultimate Member home page: https://ultimatemember.com/
+## Useful links
 
-Ultimate Member documentation: https://docs.ultimatemember.com/
+[Ultimate Member documentation](https://docs.ultimatemember.com)
 
-Ultimate Member download: https://wordpress.org/plugins/ultimate-member/
+[Ultimate Member core plugin info and download](https://wordpress.org/plugins/ultimate-member)
 
-Articles: [How to translate plugin](https://docs.ultimatemember.com/article/1449-how-to-translate-plugin#switch), [The language switcher](https://polylang.pro/doc/the-language-switcher/)
+[Free extensions for Ultimate Member](https://docs.google.com/document/d/1wp5oLOyuh5OUtI9ogcPy8NL428rZ8PVTu_0R-BuKKp8/edit?usp=sharing)
+
+[Code snippets for Ultimate Member](https://docs.google.com/document/d/1_bikh4JYlSjjQa0bX1HDGznpLtI0ur_Ma3XQfld2CKk/edit?usp=sharing)
