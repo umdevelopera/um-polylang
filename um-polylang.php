@@ -11,15 +11,13 @@
  * Requires Plugins: ultimate-member, polylang
  * Requires at least: 6.5
  * Requires PHP: 7.4
- * UM version: 2.9.1
- * Version: 1.2.1
+ * UM version: 2.9.2
+ * Version: 1.2.2
  *
  * @package um_ext\um_polylang
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
@@ -37,7 +35,7 @@ define( 'um_polylang_textdomain', 'um-polylang' );
 if ( ! function_exists( 'um_polylang_activation_hook' ) ) {
 	function um_polylang_activation_hook() {
 		if ( function_exists( 'UM' ) && function_exists( 'pll_languages_list' ) ) {
-			require_once 'includes/admin/class-admin.php';
+			require_once 'includes/admin/class-pll.php';
 			require_once 'includes/core/class-setup.php';
 			if ( class_exists( 'um_ext\um_polylang\core\Setup' ) ) {
 				$setup = new um_ext\um_polylang\core\Setup();
@@ -71,9 +69,9 @@ if ( ! function_exists( 'um_polylang_check_dependencies' ) ) {
 				}
 			);
 		} else {
-			require_once 'includes/core/class-um-polylang.php';
+			require_once 'includes/class-um-polylang.php';
 			UM()->set_class( 'Polylang', true );
 		}
 	}
 }
-add_action( 'plugins_loaded', 'um_polylang_check_dependencies', 2 );
+add_action( 'init', 'um_polylang_check_dependencies', 1 );

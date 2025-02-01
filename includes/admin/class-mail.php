@@ -1,18 +1,12 @@
 <?php
+namespace um_ext\um_polylang\admin;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Translate email templates.
  *
- * @package um_ext\um_polylang\admin
- */
-
-namespace um_ext\um_polylang\admin;
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-/**
- * Translate email templates.
+ * Get an instance this way: UM()->Polylang()->admin()->mail()
  *
  * @package um_ext\um_polylang\admin
  */
@@ -20,12 +14,11 @@ class Mail {
 
 
 	/**
-	 * Class Mail constructor.
+	 * Class constructor.
 	 */
 	public function __construct() {
 		// Email table.
-		add_filter( 'um_email_templates_columns', array( &$this, 'email_table_columns' ), 10, 1 );
-		add_filter( 'um_email_notifications', array( &$this, 'email_table_items' ), 10, 1 );
+		add_action( 'um_settings_page_before_email__content', array( $this, 'settings_email' ), 8 );
 
 		// Email settings.
 		add_filter( 'um_admin_settings_email_section_fields', array( &$this, 'admin_settings_email_section_fields' ), 10, 2 );
@@ -82,6 +75,17 @@ class Mail {
 
 
 	/**
+	 * Add column to the "Email notifications" table in settings.
+	 *
+	 * Hook: um_settings_page_before_email__content - 8.
+	 */
+	public function settings_email() {
+		add_filter( 'um_email_templates_columns', array( &$this, 'email_table_columns' ), 10, 1 );
+		$this->email_table_items( UM()->config()->email_notifications );
+	}
+
+
+	/**
 	 * Add header for the column 'translations' in the Email table.
 	 *
 	 * @since 1.1.0
@@ -90,7 +94,6 @@ class Mail {
 	 * @return array
 	 */
 	public function email_table_columns( $columns ) {
-
 		$languages = pll_languages_list();
 		if ( count( $languages ) > 0 ) {
 
@@ -98,7 +101,7 @@ class Mail {
 			foreach ( $languages as $language ) {
 				$language = PLL()->model->get_language( $language );
 				$flag     = is_object( $language ) ? $language->flag : $language;
-				$flags   .= '<span class="um-flag" style="margin:2px">' . $flag . '</span>';
+				$flags   .= '<span class="um-flag" style="display: inline-block; width: 22px;">' . $flag . '</span>';
 			}
 
 			$new_columns = array();
@@ -111,7 +114,6 @@ class Mail {
 
 			$columns = $new_columns;
 		}
-
 		return $columns;
 	}
 
@@ -124,16 +126,16 @@ class Mail {
 	 * @param  array $email_notifications Email templates data.
 	 * @return string
 	 */
-	public function email_table_items( $email_notifications ) {
+	public function email_table_items( &$email_notifications ) {
 		$languages = pll_languages_list();
-
-		foreach ( $email_notifications as &$email_notification ) {
-			$email_notification['pll_translations'] = '';
-			foreach ( $languages as $language ) {
-				$email_notification['pll_translations'] .= $this->email_table_link( $email_notification['key'], $language );
+		if ( count( $languages ) > 0 ) {
+			foreach ( $email_notifications as &$email_notification ) {
+				$email_notification['pll_translations'] = '';
+				foreach ( $languages as $language ) {
+					$email_notification['pll_translations'] .= $this->email_table_link( $email_notification['key'], $language );
+				}
 			}
 		}
-
 		return $email_notifications;
 	}
 
@@ -161,6 +163,7 @@ class Mail {
 			$template_path = UM()->mail()->get_template_file( 'plugin', $template );
 		}
 
+		$name = trim( preg_replace( '/\s?\(.*\)/i', '', $language->get_prop( 'name' ) ) );
 		$link = add_query_arg(
 			array(
 				'email' => $template,
@@ -171,22 +174,24 @@ class Mail {
 		if ( file_exists( $template_path ) ) {
 
 			// translators: %s - language name.
-			$hint      = sprintf( __( 'Edit the translation in %s', 'polylang' ), $language->get_prop( 'name' ) );
+			$hint = sprintf( __( 'Edit the translation in %s', 'polylang' ), $name );
+
+			// translators: %1$s - URL, %2$s - text.
 			$icon_html = sprintf(
-				'<a href="%1$s" title="%2$s" class="pll_icon_edit"><span class="screen-reader-text">%3$s</span></a>',
+				'<a href="%1$s" title="%2$s" class="pll_icon_edit um_tooltip" style="display: inline-block; width: 22px;"><span class="screen-reader-text">%2$s</span></a>',
 				esc_url( $link ),
-				esc_html( $hint ),
 				esc_html( $hint )
 			);
 		} else {
 
 			// translators: %s - language name.
-			$hint      = sprintf( __( 'Add a translation in %s', 'polylang' ), $language->get_prop( 'name' ) );
+			$hint = sprintf( __( 'Add a translation in %s', 'polylang' ), $name );
+
+			// translators: %1$s - URL, %2$s - text.
 			$icon_html = sprintf(
-				'<a href="%1$s" title="%2$s" class="pll_icon_add"><span class="screen-reader-text">%3$s</span></a>',
+				'<a href="%1$s" title="%2$s" class="pll_icon_add um_tooltip" style="display: inline-block; width: 22px;"><span class="screen-reader-text">%2$s</span></a>',
 				esc_url( $link ),
-				esc_attr( $hint ),
-				esc_html( $hint )
+				esc_attr( $hint )
 			);
 		}
 

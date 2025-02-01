@@ -1,0 +1,15 @@
+/*
+ Plugin Name: Ultimate Member - Polylang
+ Description: This styles are used in the wp-admin area
+ Version: 1.2.2
+*/
+
+/* Fix column width in the "Forms" table */
+@media screen and (max-width: 1200px) {
+	.post-type-um_form table.fixed tr > * { padding-left: 5px; padding-right: 5px; }
+	.post-type-um_form table.fixed .manage-column.column-title { width: 180px; }
+	.post-type-um_form table.fixed .manage-column.column-id { width: 40px; }
+	.post-type-um_form table.fixed .manage-column.column-mode { width: 60px; }
+	.post-type-um_form table.fixed .manage-column.column-is_default { width: 50px; }
+	.post-type-um_form table.fixed .manage-column.column-shortcode { width: 120px; }
+}

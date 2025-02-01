@@ -1,20 +1,16 @@
 <?php
-/**
- * Translate email templates.
- *
- * @package um_ext\um_polylang\core
- */
-
 namespace um_ext\um_polylang\core;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Translate email templates.
  *
+ * Get an instance this way: UM()->Polylang()->core()->mail()
+ *
  * @package um_ext\um_polylang\core
+ *
+ * @version 1.2.2 public method `set_user_lang` added.
  */
 class Mail {
 
@@ -24,9 +20,15 @@ class Mail {
 	 */
 	public function __construct() {
 
+		// Localize Subject.
 		add_filter( 'um_email_send_subject', array( &$this, 'localize_email_subject' ), 10, 2 );
+
+		// Localize Template.
 		add_filter( 'um_change_email_template_file', array( &$this, 'change_email_template_file' ), 10, 1 );
 		add_filter( 'um_locate_email_template', array( &$this, 'locate_email_template' ), 10, 2 );
+
+		// Set current language.
+		add_action( 'um_before_email_notification_sending', array( $this, 'set_user_lang' ), 10, 3 );
 	}
 
 
@@ -93,6 +95,25 @@ class Mail {
 		}
 
 		return wp_normalize_path( $template );
+	}
+
+
+	/**
+	 * Set current language.
+	 *
+	 * Hook: um_before_email_notification_sending - 10
+	 *
+	 * @since 1.2.2
+	 *
+	 * @param string $email    Email address.
+	 * @param string $template Email template slug.
+	 * @param array  $args     Arguments for sending email.
+	 */
+	public function set_user_lang( $email, $template, $args ) {
+		$user = get_user_by( 'email', $email );
+		if ( $user && ! empty( $user->locale ) ) {
+			$_GET['lang'] = substr( $user->locale, 0, 2 );
+		}
 	}
 
 }

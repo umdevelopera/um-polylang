@@ -1,22 +1,23 @@
 <?php
-/**
- * Create translated posts and forms
- *
- * @package um_ext\um_polylang\core
- */
-
 namespace um_ext\um_polylang\core;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Create translated pages and forms
  *
+ * Get an instance this way: UM()->Polylang()->posts()
+ *
  * @package um_ext\um_polylang\core
  */
 class Posts {
+
+	const SKIP_META = array(
+		'_um_core',
+		'_icl_lang_duplicate_of',
+		'_wpml_media_featured',
+		'_wpml_media_duplicate',
+	);
 
 	public function __construct() {
 		add_action( 'pll_save_post', array( $this, 'pll_save_post' ), 20, 3 );
@@ -73,7 +74,7 @@ class Posts {
 
 					// Duplicate postmeta.
 					foreach ( $postmeta as $key => $value ) {
-						if ( '_um_core' === $key ) {
+						if ( in_array( $key, self::SKIP_META, true ) ) {
 							continue;
 						}
 						$meta_value = maybe_unserialize( $value[0] );

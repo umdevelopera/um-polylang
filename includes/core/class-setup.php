@@ -1,23 +1,25 @@
 <?php
+namespace um_ext\um_polylang\core;
+use um_ext\um_polylang\admin\PLL_Settings;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Actions on installation.
  *
- * @package um_ext\um_polylang\core
- */
-
-namespace um_ext\um_polylang\core;
-use um_ext\um_polylang\admin\Admin;
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-/**
- * Setup extension
+ * Get an instance this way: UM()->Polylang()->setup()
  *
  * @package um_ext\um_polylang\core
  */
 class Setup {
+
+	const NOTICES = array(
+		'um_pll_create_forms',
+		'um_pll_create_pages',
+		'um_pll_create_account_tabs',
+		'um_pll_create_profile_tabs',
+	);
+
 
 	/**
 	 * Updates core pages.
@@ -40,8 +42,22 @@ class Setup {
 	public function reset_admin_notices() {
 		$hidden_notices = get_option( 'um_hidden_admin_notices', array() );
 		if ( $hidden_notices && is_array( $hidden_notices ) ) {
-			$hidden_notices = array_diff( $hidden_notices, Admin::NOTICES );
+			$hidden_notices = array_diff( $hidden_notices, self::NOTICES );
 			update_option( 'um_hidden_admin_notices', $hidden_notices );
+		}
+	}
+
+
+	/**
+	 * Set default Polylang settings.
+	 *
+	 * @since 1.2.2
+	 */
+	public function set_default_settings() {
+		if ( is_array( PLL()->options ) ) {
+			$um_post_types               = (array) apply_filters( 'um_pll_get_post_types', PLL_Settings::POST_TYPES, false );
+			PLL()->options['post_types'] = empty( PLL()->options['post_types'] ) ? $um_post_types : array_merge( PLL()->options['post_types'], $um_post_types );
+			update_option( 'polylang', PLL()->options );
 		}
 	}
 
@@ -52,6 +68,7 @@ class Setup {
 	public function run() {
 		$this->flush_rewrite_rules();
 		$this->reset_admin_notices();
+		$this->set_default_settings();
 	}
 
 }

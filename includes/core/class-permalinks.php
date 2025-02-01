@@ -1,27 +1,24 @@
 <?php
-/**
- * Localize permalinks.
- *
- * @package um_ext\um_polylang\core
- */
-
 namespace um_ext\um_polylang\core;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Localize permalinks.
+ * Localize links.
+ *
+ * Get an instance this way: UM()->Polylang()->core()->permalinks()
  *
  * @version 1.1.0 static method `update_core_pages` removed.
+ * @version 1.2.2 public method `localize_reset_url` added.
  *
  * @package um_ext\um_polylang\core
  */
 class Permalinks {
 
+	public $is_switcher = false;
+
 	/**
-	 * Class Permalinks constructor.
+	 * Class constructor.
 	 */
 	public function __construct() {
 
@@ -29,12 +26,28 @@ class Permalinks {
 		add_filter( 'rewrite_rules_array', array( &$this, 'add_rewrite_rules' ), 10, 1 );
 
 		// Links in emails.
-		add_filter( 'um_activate_url', array( &$this, 'localize_activate_url' ), 10, 1 );
+		add_action( 'um_before_email_notification_sending', array( $this, 'before_email' ) );
 
 		// Pages.
 		add_filter( 'um_get_core_page_filter', array( &$this, 'localize_core_page_url' ), 10, 3 );
-		add_filter( 'um_localize_permalink_filter', array( &$this, 'localize_profile_permalink' ), 10, 2 );
+		add_filter( 'um_profile_permalink', array( $this, 'localize_profile_permalink' ), 10, 3 );
 		add_filter( 'page_link', array( $this, 'localize_core_page_link' ), 10, 2 );
+
+		// Detect PLL shitcher.
+		add_filter( 'pll_the_languages_args', function( $args ) {
+			$this->is_switcher = true;
+			return $args;
+		} );
+		add_filter( 'pll_the_languages', function( $html ) {
+			$this->is_switcher = false;
+			return $html;
+		} );
+
+		// Filter links in the language switcher.
+		add_filter( 'pll_the_language_link', array( &$this, 'filter_pll_switcher_link' ), 10, 3 );
+
+		// Fix conflict with WooCommerce in Account.
+		add_filter( 'woocommerce_account_endpoint_page_not_found', array( &$this, 'filter_woocommerce_not_found' ) );
 
 		// Logout.
 		add_action( 'template_redirect', array( $this, 'localize_logout_page' ), 9990 );
@@ -42,12 +55,6 @@ class Permalinks {
 		// Buttons.
 		add_filter( 'um_login_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
 		add_filter( 'um_register_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
-
-		// Filter the link in the language switcher.
-		add_filter( 'pll_the_language_link', array( &$this, 'filter_pll_switcher_link' ), 10, 3 );
-
-		// Fix conflict with WooCommerce in Account.
-		add_filter( 'woocommerce_account_endpoint_page_not_found', array( &$this, 'filter_woocommerce_not_found' ) );
 	}
 
 
@@ -119,7 +126,22 @@ class Permalinks {
 
 
 	/**
-	 * Filter the link in the language switcher.
+	 * Before email notification sending.
+	 *
+	 * @since 1.2.2
+	 */
+	public function before_email() {
+
+		// Localize {account_activation_link}.
+		add_filter( 'um_activate_url', array( $this, 'localize_activate_url' ), 10, 1 );
+
+		// Localize {password_reset_link}.
+		add_filter( 'um_get_core_page_filter', array( $this, 'localize_reset_url' ), 10, 3 );
+	}
+
+
+	/**
+	 * Filter links in the language switcher.
 	 *
 	 * @since   1.0.1
 	 * @version 1.1.0 static method `update_core_pages` removed.
@@ -129,7 +151,6 @@ class Permalinks {
 	 * @param string      $locale The language locale.
 	 */
 	public function filter_pll_switcher_link( $url, $slug, $locale ) {
-		$user_id        = um_profile_id();
 		$permalink_type = get_option( 'permalink_structure' );
 
 		// Account.
@@ -149,7 +170,8 @@ class Permalinks {
 		}
 
 		// Profile.
-		if ( $url && $user_id && um_is_core_page( 'user' ) ) {
+		if ( $url && um_is_core_page( 'user' ) && um_get_requested_user() ) {
+			$user_id        = um_profile_id();
 			$permalink_base = UM()->options()->get( 'permalink_base' );
 			$profile_slug   = strtolower( get_user_meta( $user_id, "um_user_profile_url_slug_{$permalink_base}", true ) );
 
@@ -186,63 +208,36 @@ class Permalinks {
 	 * Get translated page URL.
 	 *
 	 * @since 1.0.0
+	 * @version 1.2.2 static variable $cache added.
 	 *
-	 * @param  integer $post_id  The post/page ID.
-	 * @param  string  $language Slug or locale of the queried language.
+	 * @staticvar array $cache Cached URLs.
+	 * @param integer $post_id The post/page ID.
+	 * @param string  $lang    Slug or locale of the queried language.
 	 * @return string|false
 	 */
-	public function get_page_url_for_language( $post_id, $language = '' ) {
-		$lang = '';
-		if ( is_string( $language ) && strlen( $language ) > 2 ) {
-			$lang = current( explode( '_', $language ) );
-		} elseif ( is_string( $language ) ) {
-			$lang = trim( $language );
+	public function get_page_url_for_language( $post_id, $lang = '' ) {
+		if ( is_string( $lang ) && strlen( $lang ) > 2 ) {
+			$lang = current( explode( '_', $lang ) );
+		} elseif ( is_string( $lang ) ) {
+			$lang = trim( $lang );
 		}
 
-		$lang_post_id = pll_get_post( $post_id, $lang );
-
-		if ( $lang_post_id && is_numeric( $lang_post_id ) ) {
-			$url = get_permalink( $lang_post_id );
-		} else {
-			$url = get_permalink( $post_id );
+		static $cache = array();
+		if ( ! array_key_exists( "$post_id:$lang", $cache ) ) {
+			$lang_post_id              = pll_get_post( $post_id, $lang );
+			$cache[ "$post_id:$lang" ] = $lang_post_id ? get_permalink( $lang_post_id ) : get_permalink( $post_id );
 		}
 
-		return $url;
-	}
-
-
-	/**
-	 * Check if the current page is a UM Core Page or not.
-	 *
-	 * @hooked um_is_core_page
-	 *
-	 * @since 1.0.0
-	 * @deprecated since version 1.0.1
-	 *
-	 * @global \WP_Post $post
-	 * @param  boolean $is_core_page Is core page.
-	 * @param  string  $page         Page key.
-	 * @return boolean
-	 */
-	public function is_core_page( $is_core_page, $page ) {
-		global $post;
-
-		$lang_post_id = absint( pll_get_post( $post->ID, pll_default_language() ) );
-		$um_page_id   = isset( UM()->config()->permalinks[ $page ] ) ? absint( UM()->config()->permalinks[ $page ] ) : 0;
-		if ( $um_page_id && $um_page_id === $lang_post_id ) {
-			$is_core_page = true;
-		}
-
-		return $is_core_page;
+		return $cache[ "$post_id:$lang" ];
 	}
 
 
 	/**
 	 * Filter account activation link.
+	 * Hook: um_activate_url
 	 *
-	 * @hooked um_activate_url
+	 * @see \um\core\Permalinks
 	 *
-	 * @see um\core\Permalinks
 	 * @since 1.1.0
 	 *
 	 * @param string $url Account activation link.
@@ -251,7 +246,7 @@ class Permalinks {
 	public function localize_activate_url( $url ){
 		if ( ! UM()->Polylang()->is_default() ) {
 			$url = add_query_arg( 'lang', UM()->Polylang()->get_current(), $url );
-			}
+		}
 		return $url;
 	}
 
@@ -268,11 +263,9 @@ class Permalinks {
 	 * @return string The page permalink.
 	 */
 	public function localize_core_page_link( $link, $post_id ) {
-		if ( ! UM()->Polylang()->is_default() ) {
-			if ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) ) {
-				$url  = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
-				$link = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
-			}
+		if ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) && ! $this->is_switcher && ! UM()->Polylang()->is_default() ) {
+			$url  = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
+			$link = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
 		}
 		return $link;
 	}
@@ -360,16 +353,47 @@ class Permalinks {
 	/**
 	 * Filter profile page URL.
 	 *
-	 * @hooked um_localize_permalink_filter
+	 * Hook: um_profile_permalink - 10
 	 *
 	 * @since 1.0.0
+	 * @version 1.2.2 parameter $slug added.
 	 *
-	 * @param  string  $profile_url Default profile URL.
-	 * @param  integer $page_id     The page ID.
+	 * @param string  $profile_url Default profile URL.
+	 * @param integer $page_id     The page ID.
+	 * @param string  $slug        User profile slug.
 	 * @return string
 	 */
-	public function localize_profile_permalink( $profile_url, $page_id ) {
-		return $this->get_page_url_for_language( $page_id );
+	public function localize_profile_permalink( $profile_url, $page_id, $slug ) {
+		$url = $this->get_page_url_for_language( $page_id );
+		if ( UM()->is_permalinks ) {
+			$profile_url = trailingslashit( $url ) . trailingslashit( strtolower( $slug ) );
+		} else {
+			$profile_url = add_query_arg( 'um_user', strtolower( $slug ), $url );
+		}
+		return $profile_url;
+	}
+
+
+	/**
+	 * Localize password reset link - {password_reset_link}.
+	 * Hook: um_get_core_page_filter
+	 *
+	 * @see \um\core\Password
+	 *
+	 * @since 1.2.2
+	 *
+	 * @param string $url     UM Page URL.
+	 * @param string $slug    UM Page slug.
+	 * @param bool   $updated Additional parameter.
+	 * @return string Password reset page URL.
+	 */
+	public function localize_reset_url( $url, $slug, $updated ) {
+		if ( 'password-reset' === $slug && false === $updated ) {
+			if ( ! UM()->Polylang()->is_default() ) {
+				$url = add_query_arg( 'lang', UM()->Polylang()->get_current(), $url );
+			}
+		}
+		return $url;
 	}
 
 }

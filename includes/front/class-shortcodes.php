@@ -1,20 +1,15 @@
 <?php
-/**
- * Add shortcodes.
- */
-
-namespace um_ext\um_polylang\core;
-
+namespace um_ext\um_polylang\front;
 use \PLL_Switcher;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Add shortcodes.
  *
- * @package um_ext\um_polylang\core
+ * Get an instance this way: UM()->Polylang()->front()->shortcodes()
+ *
+ * @package um_ext\um_polylang\front
  */
 class Shortcodes extends PLL_Switcher {
 	const DEFAULTS = array(

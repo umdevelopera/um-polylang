@@ -1,20 +1,12 @@
 <?php
-/**
- * Init the extension.
- *
- * @package um_ext\um_polylang\core
- */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * The "Ultimate Member - Polylang" extension initialization.
  *
- * How to call: UM()->Polylang()
+ * Get an instance this way: UM()->Polylang()
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang
  */
 class UM_Polylang {
 
@@ -41,21 +33,16 @@ class UM_Polylang {
 
 
 	/**
-	 * Class UM_Polylang constructor.
+	 * Class constructor.
 	 */
 	public function __construct() {
-		$this->mail();
-		$this->permalinks();
 
-		if( UM()->is_ajax() ) {
-
-		} elseif ( UM()->is_request( 'admin' ) ) {
+		$this->core();
+		if ( UM()->is_request( 'admin' ) ) {
 			$this->admin();
 			$this->posts();
 		} elseif ( UM()->is_request( 'frontend' ) ) {
-			$this->fields();
-			$this->form();
-			$this->shortcodes();
+			$this->front();
 		}
 
 		// Extensions.
@@ -77,66 +64,42 @@ class UM_Polylang {
 	 */
 	public function admin() {
 		if ( empty( UM()->classes['um_polylang_admin'] ) ) {
-			require_once um_polylang_path . 'includes/admin/class-admin.php';
-			UM()->classes['um_polylang_admin'] = new um_ext\um_polylang\admin\Admin();
+			require_once um_polylang_path . 'includes/admin/class-init.php';
+			UM()->classes['um_polylang_admin'] = new um_ext\um_polylang\admin\Init();
 		}
 		return UM()->classes['um_polylang_admin'];
 	}
 
 
 	/**
-	 * Subclass that translates form fields.
+	 * Common functionality.
 	 *
-	 * @return um_ext\um_polylang\core\Fields()
+	 * @since 1.2.2
+	 *
+	 * @return um_ext\um_polylang\core\Init()
 	 */
-	public function fields() {
-		if ( empty( UM()->classes['um_polylang_fields'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-fields.php';
-			UM()->classes['um_polylang_fields'] = new um_ext\um_polylang\core\Fields();
+	public function core() {
+		if ( empty( UM()->classes['um_polylang_core'] ) ) {
+			require_once um_polylang_path . 'includes/core/class-init.php';
+			UM()->classes['um_polylang_core'] = new um_ext\um_polylang\core\Init();
 		}
-		return UM()->classes['um_polylang_fields'];
+		return UM()->classes['um_polylang_core'];
 	}
 
 
 	/**
-	 * Subclass that translates form.
+	 * Front-end functionality.
 	 *
-	 * @return um_ext\um_polylang\core\Form()
-	 */
-	public function form() {
-		if ( empty( UM()->classes['um_polylang_form'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-form.php';
-			UM()->classes['um_polylang_form'] = new um_ext\um_polylang\core\Form();
-		}
-		return UM()->classes['um_polylang_form'];
-	}
-
-
-	/**
-	 * Subclass that translates email templates.
+	 * @since 1.2.2
 	 *
-	 * @return um_ext\um_polylang\core\Mail()
+	 * @return um_ext\um_polylang\front\Init()
 	 */
-	public function mail() {
-		if ( empty( UM()->classes['um_polylang_mail'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-mail.php';
-			UM()->classes['um_polylang_mail'] = new um_ext\um_polylang\core\Mail();
+	public function front() {
+		if ( empty( UM()->classes['um_polylang_front'] ) ) {
+			require_once um_polylang_path . 'includes/front/class-init.php';
+			UM()->classes['um_polylang_front'] = new um_ext\um_polylang\front\Init();
 		}
-		return UM()->classes['um_polylang_mail'];
-	}
-
-
-	/**
-	 * Subclass that localizes permalinks.
-	 *
-	 * @return um_ext\um_polylang\core\Permalinks()
-	 */
-	public function permalinks() {
-		if ( empty( UM()->classes['um_polylang_permalinks'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-permalinks.php';
-			UM()->classes['um_polylang_permalinks'] = new um_ext\um_polylang\core\Permalinks();
-		}
-		return UM()->classes['um_polylang_permalinks'];
+		return UM()->classes['um_polylang_front'];
 	}
 
 
@@ -173,22 +136,6 @@ class UM_Polylang {
 
 
 	/**
-	 * Subclass that add shortcodes.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @return um_ext\um_polylang\core\Shortcodes()
-	 */
-	public function shortcodes() {
-		if ( empty( UM()->classes['um_polylang_shortcodes'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-shortcodes.php';
-			UM()->classes['um_polylang_shortcodes'] = new um_ext\um_polylang\core\Shortcodes();
-		}
-		return UM()->classes['um_polylang_shortcodes'];
-	}
-
-
-	/**
 	 * Returns the current language.
 	 *
 	 * @since 1.0.0
@@ -203,7 +150,8 @@ class UM_Polylang {
 			$lang = sanitize_key( $_GET['lang'] );
 		}
 		if ( empty( $lang ) || 'all' === $lang ) {
-			$lang = substr( get_locale(), 0, 2 );
+			$locale = determine_locale();
+			$lang   = substr( $locale, 0, 2 );
 		}
 		$language = PLL()->model->get_language( $lang );
 
@@ -233,6 +181,45 @@ class UM_Polylang {
 	 */
 	public function get_languages_list() {
 		return pll_languages_list();
+	}
+
+
+	/**
+	 * Returns an object with the language details.
+	 *
+	 * @since 1.2.2
+	 *
+	 * @param string $lang Language code.
+	 * @return object Language info.
+	 */
+	public function get_translation( $lang ) {
+		require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+		$translations = wp_get_available_translations();
+
+		switch( $lang ) {
+			case 'ca': $locale = 'en_CA'; break;
+			case 'en': $locale = 'en_GB'; break;
+			case 'us': $locale = 'en_US'; break;
+			case 'ar': $locale = 'es_AR'; break;
+			case 'co': $locale = 'es_CO'; break;
+			case 'mx': $locale = 'es_MX'; break;
+			case 'br': $locale = 'pt_BR'; break;
+			default: $locale = $lang . '_' . strtoupper( $lang ); break;
+		}
+
+		if ( array_key_exists( $lang, $translations ) ) {
+			$translation = $translations[ $lang ];
+		} elseif ( array_key_exists( $locale, $translations ) ) {
+			$translation = $translations[ $locale ];
+		} else {
+			foreach ( $translations as $t ) {
+				if ( in_array( $lang, $t['iso'], true ) ) {
+					$translation = $t;
+					break;
+				}
+			}
+		}
+		return empty( $translation ) ? false : (object) $translation;
 	}
 
 
