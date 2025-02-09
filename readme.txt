@@ -30,6 +30,13 @@ This is a free extension created for the community. The Ultimate Member team doe
 
 == Changelog ==
 
+= 1.0.1: June 21, 2023 =
+
+* Added: A notice that Polylang plugin is required.
+* Tweak: Flush rewrite rules on activation.
+* Fixed: Account and profile links in the language switcher.
+* Fixed: Conflict with WooCommerce in Account.
+
 = 1.0.0: June 14, 2023 =
 
 * Initial release.

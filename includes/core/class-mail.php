@@ -119,9 +119,9 @@ class Mail {
 
 			$flags_column = '';
 			foreach ( $languages as $language ) {
-				if ( UM()->Polylang()->get_current() === $language ) {
-					continue;
-				}
+//				if ( UM()->Polylang()->get_current() === $language ) {
+//					continue;
+//				}
 				$language      = $polylang->model->get_language( $language );
 				$flags_column .= '<span class="um-flag" style="margin:2px">' . $language->flag . '</span>';
 			}
@@ -156,9 +156,9 @@ class Mail {
 		foreach ( $email_notifications as &$email_notification ) {
 			$email_notification['pll_translations'] = '';
 			foreach ( $languages as $language ) {
-				if ( UM()->Polylang()->get_current() === $language ) {
-					continue;
-				}
+//				if ( UM()->Polylang()->get_current() === $language ) {
+//					continue;
+//				}
 				$email_notification['pll_translations'] .= $this->email_table_cell_pll_translations( $email_notification['key'], $language );
 			}
 		}

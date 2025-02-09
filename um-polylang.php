@@ -3,7 +3,7 @@
 	Plugin Name: Ultimate Member - Polylang
 	Plugin URI:  https://github.com/umdevelopera/um-polylang
 	Description: Integrates Ultimate Member with Polylang.
-	Version:     1.0.0
+	Version:     1.0.1
 	Author:      umdevelopera
 	Author URI:  https://github.com/umdevelopera
 	Text Domain: um-polylang
@@ -37,6 +37,15 @@ if ( ! function_exists( 'um_polylang_activation_hook' ) ) {
 		if ( um_polylang_version !== $version ) {
 			update_option( 'um_polylang_version', um_polylang_version );
 		}
+
+		// update core pages.
+		if ( function_exists( 'UM' ) && function_exists( 'pll_languages_list' ) ) {
+			require_once 'includes/core/class-permalinks.php';
+			if ( class_exists( 'um_ext\um_polylang\core\Permalinks' ) ) {
+				$permalinks = new um_ext\um_polylang\core\Permalinks();
+				flush_rewrite_rules();
+			}
+		}
 	}
 }
 register_activation_hook( um_polylang_plugin, 'um_polylang_activation_hook' );
@@ -45,7 +54,7 @@ register_activation_hook( um_polylang_plugin, 'um_polylang_activation_hook' );
 if ( ! function_exists( 'um_polylang_check_dependencies' ) ) {
 	function um_polylang_check_dependencies() {
 		if ( ! defined( 'um_path' ) || ! function_exists( 'UM' ) || ! UM()->dependencies()->ultimatemember_active_check() ) {
-			// UM is not active.
+			// Ultimate Member is not active.
 			add_action(
 				'admin_notices',
 				function () {
@@ -53,9 +62,17 @@ if ( ! function_exists( 'um_polylang_check_dependencies' ) ) {
 					echo '<div class="error"><p>' . wp_kses_post( sprintf( __( 'The <strong>%s</strong> extension requires the Ultimate Member plugin to be activated to work properly. You can download it <a href="https://wordpress.org/plugins/ultimate-member">here</a>', 'um-polylang' ), um_polylang_extension ) ) . '</p></div>';
 				}
 			);
+		} elseif ( ! defined( 'POLYLANG_VERSION' ) ) {
+			// Polylang is not active.
+			add_action(
+				'admin_notices',
+				function () {
+					// translators: %s - plugin name.
+					echo '<div class="error"><p>' . wp_kses_post( sprintf( __( 'The <strong>%s</strong> extension requires the Polylang plugin to be activated to work properly. You can download it <a href="https://wordpress.org/plugins/polylang/">here</a>', 'um-polylang' ), um_polylang_extension ) ) . '</p></div>';
+				}
+			);
 		} else {
-			require_once um_polylang_path . 'includes/core/class-um-polylang.php';
-
+			require_once 'includes/core/class-um-polylang.php';
 			function um_polylang_init() {
 				if ( function_exists( 'UM' ) ) {
 					UM()->set_class( 'Polylang', true );

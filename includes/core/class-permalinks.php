@@ -18,6 +18,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Permalinks {
 
+	/**
+	 * Update meta for translated core pages.
+	 * This is needed because the 'um_is_core_page' filter was removed.
+	 */
+	public static function update_core_pages() {
+		$languages = pll_languages_list();
+		foreach ( $languages as $language ) {
+			foreach ( UM()->config()->permalinks as $page => $page_id ) {
+				$lang_post_id = pll_get_post( $page_id, $language );
+				if ( $lang_post_id && is_numeric( $lang_post_id ) && $lang_post_id !== $page_id ) {
+					update_post_meta( $lang_post_id, '_um_wpml_' . $page, 1 );
+					update_post_meta( $lang_post_id, '_icl_lang_duplicate_of', $page_id );
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Class Permalinks constructor.
@@ -25,12 +42,17 @@ class Permalinks {
 	public function __construct() {
 		add_filter( 'rewrite_rules_array', array( &$this, 'add_rewrite_rules' ), 10, 1 );
 
-		add_filter( 'um_is_core_page', array( &$this, 'is_core_page' ), 10, 2 );
 		add_filter( 'um_get_core_page_filter', array( &$this, 'localize_core_page_url' ), 10, 3 );
 		add_filter( 'um_localize_permalink_filter', array( &$this, 'localize_profile_permalink' ), 10, 2 );
 
 		add_filter( 'um_login_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
 		add_filter( 'um_register_form_button_two_url', array( &$this, 'localize_page_url' ), 10, 2 );
+
+		// Filter the link in the language switcher.
+		add_filter( 'pll_the_language_link', array( &$this, 'filter_pll_switcher_link' ), 10, 3 );
+
+		// Fix conflict with WooCommerce in Account.
+		add_filter( 'woocommerce_account_endpoint_page_not_found', array( &$this, 'filter_woocommerce_not_found' ) );
 	}
 
 
@@ -48,32 +70,31 @@ class Permalinks {
 	public function add_rewrite_rules( $rules ) {
 		global $polylang;
 
-		$active_languages = pll_languages_list();
+		$languages = pll_languages_list();
+		$newrules  = array();
 
 		// Account.
 		if ( isset( UM()->config()->permalinks['account'] ) ) {
 			$account_page_id = UM()->config()->permalinks['account'];
 			$account         = get_post( $account_page_id );
 
-			$newrules = array();
-			foreach ( $active_languages as $language_code ) {
-				if ( pll_default_language() === $language_code && $polylang->options['hide_default'] ) {
+			foreach ( $languages as $language ) {
+				if ( pll_default_language() === $language && $polylang->options['hide_default'] ) {
 					continue;
 				}
-				$lang_post_id  = pll_get_post( $account_page_id, $language_code );
+				$lang_post_id  = pll_get_post( $account_page_id, $language );
 				$lang_post_obj = get_post( $lang_post_id );
 
 				if ( isset( $account->post_name ) && isset( $lang_post_obj->post_name ) ) {
 					$lang_page_slug = $lang_post_obj->post_name;
 
 					if ( 1 === $polylang->options['force_lang'] ) {
-						$newrules[ $language_code . '/' . $lang_page_slug . '/([^/]+)?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_tab=$matches[1]&lang=' . $language_code;
+						$newrules[ $language . '/' . $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_tab=$matches[1]&lang=' . $language;
 					}
 
-					$newrules[ $lang_page_slug . '/([^/]+)?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_tab=$matches[1]&lang=' . $language_code;
+					$newrules[ $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_tab=$matches[1]&lang=' . $language;
 				}
 			}
-			$rules = $newrules + $rules;
 		}
 
 		// Profile.
@@ -81,28 +102,91 @@ class Permalinks {
 			$user_page_id = UM()->config()->permalinks['user'];
 			$user         = get_post( $user_page_id );
 
-			$newrules = array();
-			foreach ( $active_languages as $language_code ) {
-				if ( pll_default_language() === $language_code && $polylang->options['hide_default'] ) {
+			foreach ( $languages as $language ) {
+				if ( pll_default_language() === $language && $polylang->options['hide_default'] ) {
 					continue;
 				}
-				$lang_post_id  = pll_get_post( $user_page_id, $language_code );
+				$lang_post_id  = pll_get_post( $user_page_id, $language );
 				$lang_post_obj = get_post( $lang_post_id );
 
 				if ( isset( $user->post_name ) && isset( $lang_post_obj->post_name ) ) {
 					$lang_page_slug = $lang_post_obj->post_name;
 
 					if ( 1 === $polylang->options['force_lang'] ) {
-						$newrules[ $language_code . '/' . $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_user=$matches[1]&lang=' . $language_code;
+						$newrules[ $language . '/' . $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_user=$matches[1]&lang=' . $language;
 					}
 
-					$newrules[ $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_user=$matches[1]&lang=' . $language_code;
+					$newrules[ $lang_page_slug . '/([^/]+)/?$' ] = 'index.php?page_id=' . $lang_post_id . '&um_user=$matches[1]&lang=' . $language;
 				}
 			}
-			$rules = $newrules + $rules;
 		}
 
-		return $rules;
+		// update core pages.
+		self::update_core_pages();
+
+		return array_merge( $newrules, $rules );
+	}
+
+	/**
+	 * Filter the link in the language switcher.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param string|null $url    The link, null if no translation was found.
+	 * @param string      $slug   The language code.
+	 * @param string      $locale The language locale.
+	 */
+	public function filter_pll_switcher_link( $url, $slug, $locale ) {
+		$user_id        = um_profile_id();
+		$permalink_type = get_option( 'permalink_structure' );
+
+		// Account.
+		if ( $url && um_is_core_page( 'account' ) && get_query_var( 'um_tab' ) ) {
+			$current_tab = get_query_var( 'um_tab' );
+
+			if ( $permalink_type ) {
+				if ( false === strpos( $url, '?' ) ) {
+					$account_url = trailingslashit( $url ) . trailingslashit( $current_tab );
+				} else {
+					$account_url = str_replace( '?', trailingslashit( $current_tab ) . '?', $url );
+				}
+			} else {
+				$account_url = add_query_arg( 'um_tab', strtolower( $current_tab ), $url );
+			}
+			$url = $account_url;
+		}
+
+		// Profile.
+		if ( $url && $user_id && um_is_core_page( 'user' ) ) {
+			$permalink_base = UM()->options()->get( 'permalink_base' );
+			$profile_slug   = strtolower( get_user_meta( $user_id, "um_user_profile_url_slug_{$permalink_base}", true ) );
+
+			if ( $permalink_type ) {
+				if ( false === strpos( $url, '?' ) ) {
+					$profile_url = trailingslashit( $url ) . trailingslashit( $profile_slug );
+				} else {
+					$profile_url = str_replace( '?', trailingslashit( $profile_slug ) . '?', $url );
+				}
+			} else {
+				$profile_url = add_query_arg( 'um_user', strtolower( $profile_slug ), $url );
+			}
+			$url = $profile_url;
+		}
+
+		return $url;
+	}
+
+
+	/**
+	 * Fix conflict with WooCommerce in Account.
+	 *
+	 * @global \WP $wp
+	 * @param  boolean $not_found Display 404 "Not Found" page or not.
+	 * @return boolean
+	 */
+	public function filter_woocommerce_not_found( $not_found ) {
+		global $wp;
+		return isset( $wp->query_vars['payment-methods'] ) && um_is_core_page( 'account' ) ? false : $not_found;
 	}
 
 
@@ -141,6 +225,7 @@ class Permalinks {
 	 * @hook   um_is_core_page
 	 *
 	 * @since 1.0.0
+	 * @deprecated since version 1.0.1
 	 *
 	 * @global \WP_Post $post
 	 * @param  boolean $is_core_page Is core page.
