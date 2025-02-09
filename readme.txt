@@ -30,6 +30,10 @@ This is a free extension created for the community. The Ultimate Member team doe
 
 == Changelog ==
 
+= 1.0.2: July 20, 2023 =
+
+* Fixed: Translated description field value
+
 = 1.0.1: June 21, 2023 =
 
 * Added: A notice that Polylang plugin is required.
