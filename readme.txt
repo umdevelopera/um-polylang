@@ -46,11 +46,12 @@ Download ZIP file from Google Drive. You can find download links here: https://g
 
 == Changelog ==
 
-= 1.2.3: November X, 2025 =
+= 1.2.3: November 1, 2025 =
 
 * Bugfixes:
 
   - Fixed a conflict with the "Profile Tabs" extension version 1.2.0
+  - Fixed issue #12 - The `localize_core_page_link` method gets stuck in a loop.
 
 = 1.2.2: February 9, 2025 =
 
