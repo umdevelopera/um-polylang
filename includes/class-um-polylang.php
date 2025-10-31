@@ -49,7 +49,7 @@ class UM_Polylang {
 		if ( defined( 'um_account_tabs_version' ) ) {
 			require_once um_polylang_path . 'includes/extensions/account-tabs.php';
 		}
-		if ( defined( 'um_profile_tabs_version' ) ) {
+		if ( defined( 'UM_PROFILE_TABS_VERSION' ) && is_callable( array( UM(), 'Profile_Tabs' ) ) ) {
 			require_once um_polylang_path . 'includes/extensions/profile-tabs.php';
 		}
 	}

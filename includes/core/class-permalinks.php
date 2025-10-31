@@ -263,11 +263,30 @@ class Permalinks {
 	 * @return string The page permalink.
 	 */
 	public function localize_core_page_link( $link, $post_id ) {
-		if ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) && ! $this->is_switcher && ! UM()->Polylang()->is_default() ) {
-			$url  = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
-			$link = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
-		}
-		return $link;
+    global $wp_current_filter;
+    
+    if ( $this->is_switcher ) { // Do not localize links in the PLL language switcher.
+      return $link;
+    }
+
+    static $is_loop = false;
+    if ( $is_loop || count( array_keys( $wp_current_filter, 'page_link' ) ) > 1 ) {
+      // Avoid getting stuck in loops.
+
+    } elseif ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) ) {
+      // Localize links only for the Ultimate Member pages.
+
+      if ( pll_get_post_language( $post_id ) !== pll_current_language() ) {
+        // Skip already localized links.
+        
+        $is_loop = true;
+        $url     = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
+        $link    = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
+      }
+      $is_loop = false;
+    }
+
+    return $link;
 	}
 
 

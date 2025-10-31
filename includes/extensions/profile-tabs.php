@@ -174,8 +174,8 @@ function um_polylang_profile_tabs_add_tabs( $tabs ) {
 	return $tabs;
 }
 add_filter( 'um_profile_tabs', 'um_polylang_profile_tabs_add_tabs', 9999, 1 );
-remove_filter( 'um_profile_tabs', array( UM()->Profile_Tabs()->profile(), 'add_tabs' ), 9999, 1 );
-remove_filter( 'um_profile_tabs', array( UM()->Profile_Tabs()->profile(), 'predefine_tabs' ), 1, 1 );
+remove_filter( 'um_profile_tabs', array( um_polylang_profile_tabs_get_class_profile(), 'add_tabs' ), 9999, 1 );
+remove_filter( 'um_profile_tabs', array( um_polylang_profile_tabs_get_class_profile(), 'predefine_tabs' ), 1, 1 );
 
 
 /**
@@ -246,7 +246,7 @@ function um_polylang_profile_tabs_get_tabs() {
 							$tab_content = um_convert_tags( $content, array(), false );
 
 							if ( ! empty( $tab['form'] ) ) {
-								add_filter( 'um_force_shortcode_render', array( UM()->Profile_Tabs()->profile(), 'force_break_form_shortcode' ) );
+								add_filter( 'um_force_shortcode_render', array( um_polylang_profile_tabs_get_class_profile(), 'force_break_form_shortcode' ) );
 							}
 							if ( class_exists( '\Elementor\Plugin' ) ) {
 								\Elementor\Plugin::instance()->frontend->remove_content_filter();
@@ -258,9 +258,9 @@ function um_polylang_profile_tabs_get_tabs() {
 								\Elementor\Plugin::instance()->frontend->add_content_filter();
 							}
 							if ( ! empty( $tab['form'] ) ) {
-								remove_filter( 'um_force_shortcode_render', array( UM()->Profile_Tabs()->profile(), 'force_break_form_shortcode' ) );
+								remove_filter( 'um_force_shortcode_render', array( um_polylang_profile_tabs_get_class_profile(), 'force_break_form_shortcode' ) );
 								echo '<div class="um-clear"></div>';
-								echo UM()->Profile_Tabs()->profile()->um_custom_tab_form( $tab['tabid'], $tab['form'] );
+								echo um_polylang_profile_tabs_get_class_profile()->um_custom_tab_form( $tab['tabid'], $tab['form'] );
 							}
 						}
 					);
@@ -284,4 +284,16 @@ function um_polylang_profile_tabs_get_tabs() {
 	}
 
 	return $custom_tabs;
+}
+
+
+/**
+ * Get class Profile.
+ *
+ * @since 1.2.3
+ *
+ * @return um_ext\um_profile_tabs\core\Profile
+ */
+function um_polylang_profile_tabs_get_class_profile() {
+  return method_exists( UM()->Profile_Tabs(), 'profile' ) ? UM()->Profile_Tabs()->profile() : UM()->Profile_Tabs()->common()->profile();
 }
