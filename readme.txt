@@ -50,7 +50,7 @@ Download ZIP file from Google Drive. You can find download links here: https://g
 
 * Bugfixes:
 
-  - Fixed a conflict with the "Profile Tabs" extension version 1.2.0
+  - Fixed a conflict with the "Profile Tabs" extension version 1.2.0.
   - Fixed issue #12 - The `localize_core_page_link` method gets stuck in a loop.
 
 = 1.2.2: February 9, 2025 =

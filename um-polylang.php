@@ -12,7 +12,7 @@
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * UM version: 2.10.6
- * Version: 1.2.3-alpha
+ * Version: 1.2.3
  *
  * @package um_ext\um_polylang
  */
