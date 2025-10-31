@@ -4,14 +4,14 @@ Author: umdevelopera
 Author URI: https://github.com/umdevelopera
 Plugin URI: https://github.com/umdevelopera/um-polylang
 Tags: ultimate member, polylang, multilingual
-License: GNU Version 2 or Any Later Version
+License: GNU Version 3 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
 Requires at least: 6.5
-Tested up to: 6.7.1
+Tested up to: 6.8.3
 Requires UM core at least: 2.6.8
-Tested UM core up to: 2.9.2
-Stable tag: 1.2.2
+Tested UM core up to: 2.10.6
+Stable tag: 1.2.3
 
 == Description ==
 
@@ -28,22 +28,29 @@ Integrates the "Ultimate Member" plugin with the "Polylang" plugin. Makes UM mul
 * Integration with the Account tabs extension. Makes custom account tabs translatable.
 * Integration with the Profile tabs extension. Makes custom profile tabs translatable.
 
+= Documentation & Support =
+
+This is a free extension created for the community. The Ultimate Member team does not provide support for this extension.
+Open new issue in the GitHub repository if you are facing a problem or have a suggestion: https://github.com/umdevelopera/um-polylang/issues
+
+Documentation is the README section in the GitHub repository: https://github.com/umdevelopera/um-polylang
+
 == Installation ==
 
 Note: This plugin requires the "Ultimate Member" and "Polylang" plugins to be installed first.
 Note: This plugin is designed to integrate with the "Polylang" plugin, do not use it with the "Polylang PRO" plugin.
 
-You can install this plugin from the ZIP file as any other plugin.
-Download ZIP file from GitHub or Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
-Follow this setup guide: https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin
+You can install this plugin from the ZIP file as any other plugin. Follow this instruction: https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin
 
-= Documentation & Support =
-
-This is a free extension created for the community. The Ultimate Member team does not provide support for this extension.
-Open new issue in the GitHub repository if you are facing a problem or have a suggestion: https://github.com/umdevelopera/um-polylang/issues
-Documentation is the README section in the GitHub repository: https://github.com/umdevelopera/um-polylang
+Download ZIP file from Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
 
 == Changelog ==
+
+= 1.2.3: November X, 2025 =
+
+* Bugfixes:
+
+  - Fixed a conflict with the "Profile Tabs" extension version 1.2.0
 
 = 1.2.2: February 9, 2025 =
 

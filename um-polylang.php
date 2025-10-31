@@ -11,8 +11,8 @@
  * Requires Plugins: ultimate-member, polylang
  * Requires at least: 6.5
  * Requires PHP: 7.4
- * UM version: 2.9.2
- * Version: 1.2.2
+ * UM version: 2.10.6
+ * Version: 1.2.3-alpha
  *
  * @package um_ext\um_polylang
  */
