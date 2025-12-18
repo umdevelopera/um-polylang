@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\admin\Pages
+ *
+ * @package um_ext\um_polylang\admin
+ */
+
 namespace um_ext\um_polylang\admin;
 
 defined( 'ABSPATH' ) || exit;
@@ -37,7 +43,8 @@ class Pages {
 		UM()->Polylang()->posts()->create_posts( $posts, 'page' );
 
 		$url = add_query_arg( 'update', 'um_pll_create_pages', admin_url( 'edit.php?post_type=page' ) );
-		exit( wp_safe_redirect( $url ) );
+		wp_safe_redirect( $url );
+		exit;
 	}
 
 
@@ -65,7 +72,7 @@ class Pages {
 
 		$need_translations = array();
 		foreach ( $posts as $post => $post_id ) {
-			if ( $def_lang !== pll_get_post_language( $post_id ) ) {
+			if ( pll_get_post_language( $post_id ) !== $def_lang ) {
 				continue;
 			}
 			$post_translations = pll_get_post_translations( $post_id );
@@ -76,8 +83,8 @@ class Pages {
 
 		if ( $need_translations ) {
 			$url_params = array(
-				'um_adm_action'	 => 'um_pll_create_pages',
-				'_wpnonce'			 => wp_create_nonce( 'um_pll_create_pages' ),
+				'um_adm_action' => 'um_pll_create_pages',
+				'_wpnonce'      => wp_create_nonce( 'um_pll_create_pages' ),
 			);
 
 			$url = add_query_arg( $url_params );
@@ -89,6 +96,7 @@ class Pages {
 				// translators: %1$s - plugin name, %2$s - a list of pages.
 				echo esc_html(
 					sprintf(
+						// translators: %1$s - Plugin name.
 						__( '%1$s needs to create required pages for every language to function correctly. Pages that need translation: %2$s', 'um-polylang' ),
 						UM_PLUGIN_NAME,
 						implode( ', ', $need_translations )
@@ -104,9 +112,9 @@ class Pages {
 			$message = ob_get_clean();
 
 			$notice_data = array(
-				'class'				 => 'notice-warning',
-				'message'			 => $message,
-				'dismissible'	 => true,
+				'class'       => 'notice-warning',
+				'message'     => $message,
+				'dismissible' => true,
 			);
 
 			UM()->admin()->notices()->add_notice( 'um_pll_create_pages', $notice_data, 20 );
@@ -127,5 +135,4 @@ class Pages {
 		}
 		return $messages;
 	}
-
 }

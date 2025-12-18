@@ -8,10 +8,10 @@ License: GNU Version 3 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
 Requires at least: 6.5
-Tested up to: 6.8.3
+Tested up to: 6.9
 Requires UM core at least: 2.6.8
-Tested UM core up to: 2.10.6
-Stable tag: 1.2.3
+Tested UM core up to: 2.11.1
+Stable tag: 1.3.0
 
 == Description ==
 
@@ -19,12 +19,13 @@ Integrates the "Ultimate Member" plugin with the "Polylang" plugin. Makes UM mul
 
 = Key Features =
 
-* Language switcher shortcode. Displays the Polylang language switcher where you need it.
 * Localize links for Ultimate Member pages.
 * Ability to duplicate Ultimate Member pages for all languages in one click.
 * Ability to duplicate Ultimate Member forms for all languages in one click.
+* Ability to translate the field "Label", "Help Text" and "Edit Choices" using the String Translation feature.
+* Ability to translate bio (description) in profile.
 * Ability to translate email templates.
-* Ability to translate bio (description) field in profile.
+* Language switcher shortcode. Displays the Polylang language switcher where you need it.
 * Integration with the Account tabs extension. Makes custom account tabs translatable.
 * Integration with the Profile tabs extension. Makes custom profile tabs translatable.
 
@@ -38,13 +39,22 @@ Documentation is the README section in the GitHub repository: https://github.com
 == Installation ==
 
 Note: This plugin requires the "Ultimate Member" and "Polylang" plugins to be installed first.
-Note: This plugin is designed to integrate with the "Polylang" plugin, do not use it with the "Polylang PRO" plugin.
 
 You can install this plugin from the ZIP file as any other plugin. Follow this instruction: https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin
 
 Download ZIP file from Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
 
 == Changelog ==
+
+= 1.3.0: December 25, 2025 =
+
+* Enhancements:
+
+	- Added an ability to translate the field "Label", "Help Text" and "Edit Choices" using the String Translation feature.
+
+* Bugfixes:
+
+  - Fixed links in the switcher.
 
 = 1.2.3: November 1, 2025 =
 

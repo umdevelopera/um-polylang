@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\front\Fields
+ *
+ * @package um_ext\um_polylang\front
+ */
+
 namespace um_ext\um_polylang\front;
 
 defined( 'ABSPATH' ) || exit;
@@ -96,5 +102,4 @@ class Fields {
 			update_user_meta( $user_id, $curlang_key, $args['description'] );
 		}
 	}
-
 }

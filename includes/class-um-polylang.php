@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class UM_Polylang
+ *
+ * @package um_ext\um_polylang
+ */
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -47,10 +53,10 @@ class UM_Polylang {
 
 		// Extensions.
 		if ( defined( 'um_account_tabs_version' ) ) {
-			require_once um_polylang_path . 'includes/extensions/account-tabs.php';
+			require_once UM_POLYLANG_PATH . 'includes/extensions/account-tabs.php';
 		}
-		if ( defined( 'UM_PROFILE_TABS_VERSION' ) && is_callable( array( UM(), 'Profile_Tabs' ) ) ) {
-			require_once um_polylang_path . 'includes/extensions/profile-tabs.php';
+		if ( defined( 'UM_PROFILE_TABS_VERSION' ) && is_object( @UM()->Profile_Tabs() ) ) {
+			require_once UM_POLYLANG_PATH . 'includes/extensions/profile-tabs.php';
 		}
 	}
 
@@ -64,7 +70,7 @@ class UM_Polylang {
 	 */
 	public function admin() {
 		if ( empty( UM()->classes['um_polylang_admin'] ) ) {
-			require_once um_polylang_path . 'includes/admin/class-init.php';
+			require_once UM_POLYLANG_PATH . 'includes/admin/class-init.php';
 			UM()->classes['um_polylang_admin'] = new um_ext\um_polylang\admin\Init();
 		}
 		return UM()->classes['um_polylang_admin'];
@@ -80,7 +86,7 @@ class UM_Polylang {
 	 */
 	public function core() {
 		if ( empty( UM()->classes['um_polylang_core'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-init.php';
+			require_once UM_POLYLANG_PATH . 'includes/core/class-init.php';
 			UM()->classes['um_polylang_core'] = new um_ext\um_polylang\core\Init();
 		}
 		return UM()->classes['um_polylang_core'];
@@ -96,7 +102,7 @@ class UM_Polylang {
 	 */
 	public function front() {
 		if ( empty( UM()->classes['um_polylang_front'] ) ) {
-			require_once um_polylang_path . 'includes/front/class-init.php';
+			require_once UM_POLYLANG_PATH . 'includes/front/class-init.php';
 			UM()->classes['um_polylang_front'] = new um_ext\um_polylang\front\Init();
 		}
 		return UM()->classes['um_polylang_front'];
@@ -112,7 +118,7 @@ class UM_Polylang {
 	 */
 	public function posts() {
 		if ( empty( UM()->classes['um_polylang_posts'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-posts.php';
+			require_once UM_POLYLANG_PATH . 'includes/core/class-posts.php';
 			UM()->classes['um_polylang_posts'] = new um_ext\um_polylang\core\Posts();
 		}
 		return UM()->classes['um_polylang_posts'];
@@ -128,7 +134,7 @@ class UM_Polylang {
 	 */
 	public function setup() {
 		if ( empty( UM()->classes['um_polylang_setup'] ) ) {
-			require_once um_polylang_path . 'includes/core/class-setup.php';
+			require_once UM_POLYLANG_PATH . 'includes/core/class-setup.php';
 			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\core\Setup();
 		}
 		return UM()->classes['um_polylang_setup'];
@@ -196,15 +202,31 @@ class UM_Polylang {
 		require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 		$translations = wp_get_available_translations();
 
-		switch( $lang ) {
-			case 'ca': $locale = 'en_CA'; break;
-			case 'en': $locale = 'en_GB'; break;
-			case 'us': $locale = 'en_US'; break;
-			case 'ar': $locale = 'es_AR'; break;
-			case 'co': $locale = 'es_CO'; break;
-			case 'mx': $locale = 'es_MX'; break;
-			case 'br': $locale = 'pt_BR'; break;
-			default: $locale = $lang . '_' . strtoupper( $lang ); break;
+		switch ( $lang ) {
+			case 'ca':
+				$locale = 'en_CA';
+				break;
+			case 'en':
+				$locale = 'en_GB';
+				break;
+			case 'us':
+				$locale = 'en_US';
+				break;
+			case 'ar':
+				$locale = 'es_AR';
+				break;
+			case 'co':
+				$locale = 'es_CO';
+				break;
+			case 'mx':
+				$locale = 'es_MX';
+				break;
+			case 'br':
+				$locale = 'pt_BR';
+				break;
+			default:
+				$locale = $lang . '_' . strtoupper( $lang );
+				break;
 		}
 
 		if ( array_key_exists( $lang, $translations ) ) {
@@ -246,5 +268,4 @@ class UM_Polylang {
 	public function is_default() {
 		return $this->get_current() === $this->get_default();
 	}
-
 }

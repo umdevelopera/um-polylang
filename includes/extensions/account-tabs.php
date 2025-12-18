@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Integration with the "Account tabs" extension.
  *
  * @package um_ext\um_polylang\extensions
@@ -20,12 +20,14 @@ function um_polylang_account_tabs_create() {
 		'post_status' => 'publish',
 		'post_type'   => 'um_account_tabs',
 	);
+
 	$posts = get_posts( $args );
 
 	UM()->Polylang()->posts()->create_posts( $posts, 'um_account_tabs' );
 
 	$url = add_query_arg( 'update', 'um_pll_create_account_tabs', admin_url( 'edit.php?post_type=um_account_tabs' ) );
-	exit( wp_safe_redirect( $url ) );
+	wp_safe_redirect( $url );
+	exit;
 }
 add_action( 'um_admin_do_action__um_pll_create_account_tabs', 'um_polylang_account_tabs_create' );
 
@@ -77,6 +79,7 @@ function um_polylang_account_tabs_notice() {
 		'post_status' => 'publish',
 		'post_type'   => 'um_account_tabs',
 	);
+
 	$posts = get_posts( $args );
 	if ( empty( $posts ) ) {
 		return;
@@ -98,8 +101,8 @@ function um_polylang_account_tabs_notice() {
 
 	if ( $need_translations ) {
 		$url_params = array(
-			'um_adm_action'	 => 'um_pll_create_account_tabs',
-			'_wpnonce'			 => wp_create_nonce( 'um_pll_create_account_tabs' ),
+			'um_adm_action' => 'um_pll_create_account_tabs',
+			'_wpnonce'      => wp_create_nonce( 'um_pll_create_account_tabs' ),
 		);
 
 		$url = add_query_arg( $url_params );
@@ -108,9 +111,9 @@ function um_polylang_account_tabs_notice() {
 		?>
 		<p>
 			<?php
-			// translators: %1$s - a list of tabs.
 			echo esc_html(
 				sprintf(
+					// translators: %1$s - Comma separated list of custom account tabs.
 					__( 'Extension needs to create tabs for every language to function correctly. Tabs that need translation: %1$s', 'um-polylang' ),
 					implode( ', ', $need_translations )
 				)
@@ -125,9 +128,9 @@ function um_polylang_account_tabs_notice() {
 		$message = ob_get_clean();
 
 		$notice_data = array(
-			'class'				 => 'notice-warning',
-			'message'			 => $message,
-			'dismissible'	 => true,
+			'class'       => 'notice-warning',
+			'message'     => $message,
+			'dismissible' => true,
 		);
 
 		UM()->admin()->notices()->add_notice( 'um_pll_create_account_tabs', $notice_data, 20 );
@@ -163,7 +166,7 @@ function um_polylang_account_tabs_get_tabs( $tabs ) {
 	if ( is_array( $tabs ) ) {
 		$current = UM()->Polylang()->get_current();
 		$default = UM()->Polylang()->get_default();
-		foreach( $tabs as $i => $tab ) {
+		foreach ( $tabs as $i => $tab ) {
 			$post_id   = is_object( $tab ) ? $tab->ID : absint( $tab );
 			$post_lang = pll_get_post_language( $post_id );
 			if ( $post_lang === $current ) {

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\admin\Forms
+ *
+ * @package um_ext\um_polylang\admin
+ */
+
 namespace um_ext\um_polylang\admin;
 
 defined( 'ABSPATH' ) || exit;
@@ -32,7 +38,7 @@ class Forms {
 	 * The "Create Forms" button handler.
 	 */
 	public function action_create_forms() {
-		$args = array(
+		$args  = array(
 			'fields'      => 'ids',
 			'nopaging'    => true,
 			'post_status' => 'publish',
@@ -43,7 +49,8 @@ class Forms {
 		UM()->Polylang()->posts()->create_posts( $posts, 'um_form' );
 
 		$url = add_query_arg( 'update', 'um_pll_create_forms', admin_url( 'edit.php?post_type=um_form' ) );
-		exit( wp_safe_redirect( $url ) );
+		wp_safe_redirect( $url );
+		exit;
 	}
 
 
@@ -64,7 +71,7 @@ class Forms {
 		}
 		$def_lang = pll_default_language();
 
-		$args = array(
+		$args  = array(
 			'fields'      => 'ids',
 			'nopaging'    => true,
 			'post_status' => 'publish',
@@ -91,8 +98,8 @@ class Forms {
 
 		if ( $need_translations ) {
 			$url_params = array(
-				'um_adm_action'	 => 'um_pll_create_forms',
-				'_wpnonce'			 => wp_create_nonce( 'um_pll_create_forms' ),
+				'um_adm_action' => 'um_pll_create_forms',
+				'_wpnonce'      => wp_create_nonce( 'um_pll_create_forms' ),
 			);
 
 			$url = add_query_arg( $url_params );
@@ -104,6 +111,7 @@ class Forms {
 				// translators: %1$s - plugin name, %2$s - a list of forms.
 				echo esc_html(
 					sprintf(
+						// translators: %1$s - Plugin name.
 						__( '%1$s needs to create required forms for every language to function correctly. Forms that need translation: %2$s', 'um-polylang' ),
 						UM_PLUGIN_NAME,
 						implode( ', ', $need_translations )
@@ -119,9 +127,9 @@ class Forms {
 			$message = ob_get_clean();
 
 			$notice_data = array(
-				'class'				 => 'notice-warning',
-				'message'			 => $message,
-				'dismissible'	 => true,
+				'class'       => 'notice-warning',
+				'message'     => $message,
+				'dismissible' => true,
 			);
 
 			UM()->admin()->notices()->add_notice( 'um_pll_create_forms', $notice_data, 20 );
@@ -143,5 +151,4 @@ class Forms {
 		}
 		return $messages;
 	}
-
 }

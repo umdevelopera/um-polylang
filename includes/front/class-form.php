@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\front\Form
+ *
+ * @package um_ext\um_polylang\front
+ */
+
 namespace um_ext\um_polylang\front;
 
 defined( 'ABSPATH' ) || exit;
@@ -34,7 +40,7 @@ class Form {
 	 *
 	 * @return array Shortcode arguments.
 	 */
-	public function shortcode_atts_ultimatemember( $args ){
+	public function shortcode_atts_ultimatemember( $args ) {
 		if ( isset( $args['form_id'] ) ) {
 			$form_id            = absint( $args['form_id'] );
 			$translated_form_id = pll_get_post( $form_id, pll_current_language() );
@@ -75,5 +81,4 @@ class Form {
 
 		return $args;
 	}
-
 }

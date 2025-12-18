@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\admin\Init
+ *
+ * @package um_ext\um_polylang\admin
+ */
+
 namespace um_ext\um_polylang\admin;
 
 defined( 'ABSPATH' ) || exit;
@@ -41,9 +47,9 @@ class Init {
 
 		wp_register_style(
 			'um_polylang_admin',
-			um_polylang_url . 'assets/css/um-polylang-admin.css',
+			UM_POLYLANG_URL . 'assets/css/um-polylang-admin.css',
 			array(),
-			um_polylang_version
+			UM_POLYLANG_VERSION
 		);
 
 		$screen = get_current_screen();
@@ -107,5 +113,4 @@ class Init {
 		}
 		return UM()->classes['um_polylang_admin_pll_settings'];
 	}
-
 }

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Integration with the "Profile tabs" extension.
  *
  * @package um_ext\um_polylang\extensions
@@ -20,12 +20,14 @@ function um_polylang_profile_tabs_create() {
 		'post_status' => 'publish',
 		'post_type'   => 'um_profile_tabs',
 	);
+
 	$posts = get_posts( $args );
 
 	UM()->Polylang()->posts()->create_posts( $posts, 'um_profile_tabs' );
 
 	$url = add_query_arg( 'update', 'um_pll_create_profile_tabs', admin_url( 'edit.php?post_type=um_profile_tabs' ) );
-	exit( wp_safe_redirect( $url ) );
+	wp_safe_redirect( $url );
+	exit;
 }
 add_action( 'um_admin_do_action__um_pll_create_profile_tabs', 'um_polylang_profile_tabs_create' );
 
@@ -77,6 +79,7 @@ function um_polylang_profile_tabs_notice() {
 		'post_status' => 'publish',
 		'post_type'   => 'um_profile_tabs',
 	);
+
 	$posts = get_posts( $args );
 	if ( empty( $posts ) ) {
 		return;
@@ -98,8 +101,8 @@ function um_polylang_profile_tabs_notice() {
 
 	if ( $need_translations ) {
 		$url_params = array(
-			'um_adm_action'	 => 'um_pll_create_profile_tabs',
-			'_wpnonce'			 => wp_create_nonce( 'um_pll_create_profile_tabs' ),
+			'um_adm_action' => 'um_pll_create_profile_tabs',
+			'_wpnonce'      => wp_create_nonce( 'um_pll_create_profile_tabs' ),
 		);
 
 		$url = add_query_arg( $url_params );
@@ -108,9 +111,9 @@ function um_polylang_profile_tabs_notice() {
 		?>
 		<p>
 			<?php
-			// translators: %1$s - a list of tabs.
 			echo esc_html(
 				sprintf(
+					// translators: %1$s - Comma separated list of custom profile tabs.
 					__( 'Extension needs to create tabs for every language to function correctly. Tabs that need translation: %1$s', 'um-polylang' ),
 					implode( ', ', $need_translations )
 				)
@@ -125,9 +128,9 @@ function um_polylang_profile_tabs_notice() {
 		$message = ob_get_clean();
 
 		$notice_data = array(
-			'class'				 => 'notice-warning',
-			'message'			 => $message,
-			'dismissible'	 => true,
+			'class'       => 'notice-warning',
+			'message'     => $message,
+			'dismissible' => true,
 		);
 
 		UM()->admin()->notices()->add_notice( 'um_pll_create_profile_tabs', $notice_data, 20 );
@@ -202,7 +205,7 @@ function um_polylang_profile_tabs_get_tabs() {
 			// Localize custom profile tabs.
 			$current = UM()->Polylang()->get_current();
 			$default = UM()->Polylang()->get_default();
-			foreach( $tabs as $i => $tab ) {
+			foreach ( $tabs as $i => $tab ) {
 				$post_id   = is_object( $tab ) ? $tab->ID : absint( $tab );
 				$post_lang = pll_get_post_language( $post_id );
 				if ( $post_lang === $current ) {
@@ -241,7 +244,7 @@ function um_polylang_profile_tabs_get_tabs() {
 					// Show content.
 					add_action(
 						"um_profile_content_{$slug}",
-						function( $args ) use ( $tab ) {
+						function ( $args ) use ( $tab ) {
 							$content     = wpautop( $tab['content'] );
 							$tab_content = um_convert_tags( $content, array(), false );
 
@@ -252,15 +255,15 @@ function um_polylang_profile_tabs_get_tabs() {
 								\Elementor\Plugin::instance()->frontend->remove_content_filter();
 							}
 
-							echo apply_filters( 'the_content', $tab_content );
+							echo wp_kses_post( apply_filters( 'the_content', $tab_content ) );
 
 							if ( class_exists( '\Elementor\Plugin' ) ) {
 								\Elementor\Plugin::instance()->frontend->add_content_filter();
 							}
 							if ( ! empty( $tab['form'] ) ) {
+								$tab_form_html = um_polylang_profile_tabs_get_class_profile()->um_custom_tab_form( $tab['tabid'], $tab['form'] );
 								remove_filter( 'um_force_shortcode_render', array( um_polylang_profile_tabs_get_class_profile(), 'force_break_form_shortcode' ) );
-								echo '<div class="um-clear"></div>';
-								echo um_polylang_profile_tabs_get_class_profile()->um_custom_tab_form( $tab['tabid'], $tab['form'] );
+								echo '<div class="um-clear"></div>' . $tab_form_html;
 							}
 						}
 					);
@@ -268,13 +271,13 @@ function um_polylang_profile_tabs_get_tabs() {
 					// Show remote link.
 					add_filter(
 						"um_profile_menu_link_{$slug}",
-						function( $nav_link ) use ( $tab_link ) {
+						function ( $nav_link ) use ( $tab_link ) {
 							return $tab_link;
 						}
 					);
 					add_filter(
 						"um_profile_menu_link_{$slug}_attrs",
-						function( $profile_nav_attrs ) {
+						function ( $profile_nav_attrs ) {
 							return $profile_nav_attrs . ' target="_blank"';
 						}
 					);
@@ -295,5 +298,5 @@ function um_polylang_profile_tabs_get_tabs() {
  * @return um_ext\um_profile_tabs\core\Profile
  */
 function um_polylang_profile_tabs_get_class_profile() {
-  return method_exists( UM()->Profile_Tabs(), 'profile' ) ? UM()->Profile_Tabs()->profile() : UM()->Profile_Tabs()->common()->profile();
+	return method_exists( UM()->Profile_Tabs(), 'profile' ) ? UM()->Profile_Tabs()->profile() : UM()->Profile_Tabs()->common()->profile();
 }

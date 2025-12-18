@@ -4,20 +4,19 @@ Integrates the **Ultimate Member** plugin with the **Polylang** plugin. Makes Ul
 
 ## Key features
 
-- Language switcher shortcode. Display the Polylang language switcher where you need it.
 - Localize links for Ultimate Member pages.
 - Ability to duplicate Ultimate Member pages for all languages in one click.
 - Ability to duplicate Ultimate Member forms for all languages in one click.
+- Ability to translate the field "Label", "Help Text" and "Edit Choices" using the String Translation feature.
+- Ability to translate bio (description) in profile.
 - Ability to translate email templates.
-- Ability to translate bio (description) field in profile.
+- Language switcher shortcode. Display the Polylang language switcher where you need it.
 - Integration with the [Account tabs](https://github.com/umdevelopera/um-account-tabs) extension. Makes custom account tabs translatable.
 - Integration with the [Profile tabs](https://ultimatemember.com/extensions/profile-tabs/) extension. Makes custom profile tabs translatable.
 
 ## Installation
 
 __Note:__ This plugin requires the [Ultimate Member](https://wordpress.org/plugins/ultimate-member/) and [Polylang](https://wordpress.org/plugins/polylang/) plugins to be installed first.
-
-__Note:__ This plugin is designed to integrate with the "Polylang" plugin, do not use it with the "Polylang PRO" plugin.
 
 ### How to install from GitHub
 
@@ -29,7 +28,7 @@ Once the plugin is cloned, enter your site admin dashboard and go to _wp-admin >
 
 ### How to install from ZIP archive
 
-You can install the plugin from this [ZIP file](https://drive.google.com/file/d/1m4tE5y-69IgonC8gZRijHrUjhqeo9Hjb/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
+You can install the plugin from this [ZIP file](https://drive.google.com/file/d/1K3Ac3KGAtJ_HrGtZ1MpeIMaqOm3HSZlq/view?usp=sharing) as any other plugin. Follow [this instruction](https://wordpress.org/support/article/managing-plugins/#upload-via-wordpress-admin).
 
 ## How to use
 
@@ -39,11 +38,62 @@ Go to *wp-admin > Settings > Permalinks* to verify permalink structure. The **Po
 
 ![WP Settings, Permalink (default)](https://github.com/umdevelopera/um-polylang/assets/113178913/69be91c9-12dd-490c-9145-b163c5beb26d)
 
-Verivy settings on *wp-admin > Languages > Settings*.
+Verivy settings on *wp-admin > Languages > Settings*. See recommended settings below:
 
-Image - Recommended settings.
 ![URL modifications](https://github.com/user-attachments/assets/4e5a7627-52f1-42d9-be15-fe524f46e24e)
 ![Custom post types and Taxonomies](https://github.com/user-attachments/assets/3f660a0c-57b7-41dd-96c6-b95cf9cd19ac)
+
+### How to translate pages
+
+Go to *wp-admin > Pages* to translate Ultimate Member pages. Click the **Create Pages** button in the notice to duplicate Ultimate Member pages for all languages. Or click the "+" icon unter the flag to duplicate each page manually.
+
+Once pages for languages are created you can open and translate them. Note that translated pages **Login**, **Registration**, **User** should contain translated forms. The form language should match the page language.
+
+![WP Pages cr](https://github.com/user-attachments/assets/ef991008-2d5f-4dd7-9514-a5fd0d256dc0)
+
+### How to translate forms
+
+Go to *wp-admin > Ultimate Member > Forms* to translate Ultimate Member forms. Click the **Create Forms** button in the notice to duplicate Ultimate Member forms for all languages.
+
+![UM Forms cr](https://github.com/user-attachments/assets/a6057994-ffd9-41d4-ac47-2436550732ff)
+
+Once forms for languages are created you can open these forms and translate fields. You can translate a **Label**, **Placeholder** and **Help Text** if needed.
+
+<img width="1014" height="897" alt="UM Forms, Edit Form, Edit Field  Label, Help Text, Placeholder" src="https://github.com/user-attachments/assets/28faf36b-ec3c-494b-8e11-44b9c84f3b45" />
+
+#### How to translate field options
+
+Options in the Checkbox, Radio, Dropdown and Multi-Select fields can not be translated in the form builder.
+**Don't change choices in the field settings!**
+You can use the [String Translation](https://polylang.pro/documentation/support/guides/strings-translation/) feature to translate the field  **Label**, **Help Text** and **Edit Choices** if needed.
+
+**Example:** The field settings
+<img width="1015" height="895" alt="UM Forms, Edit field " src="https://github.com/user-attachments/assets/08ea10d6-599d-4ba3-b2e8-95078b225d47" />
+
+**Example:** The "Translations" table on *wp-admin > Languages > Translations*
+<img width="1680" height="1035" alt="WP, Languages, Translations" src="https://github.com/user-attachments/assets/30264d38-0097-4b13-9d9d-547c711570f8" />
+
+### How to translate E-mails
+
+Go to *wp-admin > Ultimate Member > Settings > Email* to translate email templates. Click the "+" icon unter the flag to translate a template for the language. The plugin saves translated email templates to locale subfolders in the theme, see [Email Templates](https://docs.ultimatemember.com/article/1335-email-templates).
+
+![UM Settings, Email cr](https://github.com/user-attachments/assets/47901a64-ea93-4bdd-b70c-47f0dd3fea08)
+
+### How to translate custom account tabs
+
+This feature is available if you use the [Account tabs](https://github.com/umdevelopera/um-account-tabs) extension.
+
+Go to *wp-admin > Ultimate Member > Account Tabs*. Click the **Create Tabs** button in the notice to duplicate tabs for all languages. Once the tabs are duplicated for each language, you can edit the tabs for additional languages.
+
+![WP, Ultimate Member, Account Tabs (Create Tabs) cr](https://github.com/user-attachments/assets/bd7e22ae-ca3a-4cd4-96d8-6a9e339b1a33)
+
+### How to translate custom profile tabs
+
+This feature is available if you use the [Profile tabs](https://ultimatemember.com/extensions/profile-tabs/) extension.
+
+Go to *wp-admin > Ultimate Member > Profile Tabs*. Click the **Create Tabs** button in the notice to duplicate tabs for all languages. Once the tabs are duplicated for each language, you can edit the tabs for additional languages.
+
+![WP, Ultimate Member, ProfileTabs (Create Tabs) cr](https://github.com/user-attachments/assets/5db162cd-9c53-4d7f-8081-63f8e31d8105)
 
 ### How to display language switcher
 
@@ -68,51 +118,6 @@ Image - Language switcher shortcode in the header template.
 
 Image - Language switcher in the page header.
 ![Language switcher in the page header](https://github.com/user-attachments/assets/a39efdb2-183e-44ba-bc1d-3f39892d5004)
-
-### How to translate forms
-
-Go to *wp-admin > Ultimate Member > Forms* to translate Ultimate Member forms. Click the **Create Forms** button in the notice to duplicate Ultimate Member forms for all languages.
-
-![UM Forms cr](https://github.com/user-attachments/assets/a6057994-ffd9-41d4-ac47-2436550732ff)
-
-Once forms for languages are created you can open these forms and translate fields. You can translate a **Label**, **Placeholder** and **Help Text** if needed.
-
-__Note:__ Choices in the Checkbox, Radio, Dropdown and Multi-Select fields are not translatable. Don't change choices in the field settings!
-You can use custom functions to translate choices. See examples here:
-- [How to translate choices of the Checkbox field](https://gist.github.com/umdevelopera/f7b0e07d5db870c9ce9fc1e513224e45)
-- [How to translate choices of the Dropdown field](https://gist.github.com/umdevelopera/bcc8c882ead5914845b489ece73b612d)
-
-![UM Forms, Edit Form, Edit Field - Dropdown (use Choices Callback to translate values)+](https://github.com/umdevelopera/um-polylang/assets/113178913/4e58118e-a9b4-430a-ba02-cb766ec72c6a)
-
-### How to translate pages
-
-Go to *wp-admin > Pages* to translate Ultimate Member pages. Click the **Create Pages** button in the notice to duplicate Ultimate Member pages for all languages. Or click the "+" icon unter the flag to duplicate each page manually.
-
-Once pages for languages are created you can open and translate them. Note that translated pages **Login**, **Registration**, **User** should contain translated forms. The form language should match the page language.
-
-![WP Pages cr](https://github.com/user-attachments/assets/ef991008-2d5f-4dd7-9514-a5fd0d256dc0)
-
-### How to translate E-mails
-
-Go to *wp-admin > Ultimate Member > Settings > Email* to translate email templates. Click the "+" icon unter the flag to translate a template for the language. The plugin saves translated email templates to locale subfolders in the theme, see [Email Templates](https://docs.ultimatemember.com/article/1335-email-templates).
-
-![UM Settings, Email cr](https://github.com/user-attachments/assets/47901a64-ea93-4bdd-b70c-47f0dd3fea08)
-
-### How to translate custom account tabs
-
-This feature is available if you use the [Account tabs](https://github.com/umdevelopera/um-account-tabs) extension.
-
-Go to *wp-admin > Ultimate Member > Account Tabs*. Click the **Create Tabs** button in the notice to duplicate tabs for all languages. Once the tabs are duplicated for each language, you can edit the tabs for additional languages.
-
-![WP, Ultimate Member, Account Tabs (Create Tabs) cr](https://github.com/user-attachments/assets/bd7e22ae-ca3a-4cd4-96d8-6a9e339b1a33)
-
-### How to translate custom profile tabs
-
-This feature is available if you use the [Profile tabs](https://ultimatemember.com/extensions/profile-tabs/) extension.
-
-Go to *wp-admin > Ultimate Member > Profile Tabs*. Click the **Create Tabs** button in the notice to duplicate tabs for all languages. Once the tabs are duplicated for each language, you can edit the tabs for additional languages.
-
-![WP, Ultimate Member, ProfileTabs (Create Tabs) cr](https://github.com/user-attachments/assets/5db162cd-9c53-4d7f-8081-63f8e31d8105)
 
 ## Support
 

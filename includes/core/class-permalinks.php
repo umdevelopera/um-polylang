@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\core\Permalinks
+ *
+ * @package um_ext\um_polylang\core
+ */
+
 namespace um_ext\um_polylang\core;
 
 defined( 'ABSPATH' ) || exit;
@@ -15,7 +21,12 @@ defined( 'ABSPATH' ) || exit;
  */
 class Permalinks {
 
-	public $is_switcher = false;
+	/**
+	 * Enable the 'page_link' filter.
+	 *
+	 * @var bool
+	 */
+	public $page_link = false;
 
 	/**
 	 * Class constructor.
@@ -33,15 +44,30 @@ class Permalinks {
 		add_filter( 'um_profile_permalink', array( $this, 'localize_profile_permalink' ), 10, 3 );
 		add_filter( 'page_link', array( $this, 'localize_core_page_link' ), 10, 2 );
 
-		// Detect PLL shitcher.
-		add_filter( 'pll_the_languages_args', function( $args ) {
-			$this->is_switcher = true;
-			return $args;
-		} );
-		add_filter( 'pll_the_languages', function( $html ) {
-			$this->is_switcher = false;
-			return $html;
-		} );
+		// Bypass the 'page_link' for the language swither.
+		add_action(
+			'wp_head',
+			function () {
+				$this->page_link = true;
+			},
+			99
+		);
+		add_filter(
+			'wp_get_nav_menu_items',
+			function ( $items ) {
+				$this->page_link = false;
+				return $items;
+			},
+			19
+		);
+		add_filter(
+			'wp_get_nav_menu_items',
+			function ( $items ) {
+				$this->page_link = true;
+				return $items;
+			},
+			21
+		);
 
 		// Filter links in the language switcher.
 		add_filter( 'pll_the_language_link', array( &$this, 'filter_pll_switcher_link' ), 10, 3 );
@@ -184,6 +210,17 @@ class Permalinks {
 			} else {
 				$profile_url = add_query_arg( 'um_user', strtolower( $profile_slug ), $url );
 			}
+
+			$um_action = get_query_var( 'um_action' );
+			if ( $um_action ) {
+				$profile_url = add_query_arg( 'um_action', $um_action, $profile_url );
+			}
+
+			$profiletab = get_query_var( 'profiletab' );
+			if ( $profiletab ) {
+				$profile_url = add_query_arg( 'profiletab', $profiletab, $profile_url );
+			}
+
 			$url = $profile_url;
 		}
 
@@ -234,6 +271,7 @@ class Permalinks {
 
 	/**
 	 * Filter account activation link.
+	 *
 	 * Hook: um_activate_url
 	 *
 	 * @see \um\core\Permalinks
@@ -243,7 +281,7 @@ class Permalinks {
 	 * @param string $url Account activation link.
 	 * @return string Localized account activation link.
 	 */
-	public function localize_activate_url( $url ){
+	public function localize_activate_url( $url ) {
 		if ( ! UM()->Polylang()->is_default() ) {
 			$url = add_query_arg( 'lang', UM()->Polylang()->get_current(), $url );
 		}
@@ -263,32 +301,27 @@ class Permalinks {
 	 * @return string The page permalink.
 	 */
 	public function localize_core_page_link( $link, $post_id ) {
-    global $wp_current_filter;
-    
-    if ( $this->is_switcher ) { // Do not localize links in the PLL language switcher.
-      return $link;
-    }
+		global $wp_current_filter;
 
-    static $is_loop = false;
-    if ( $is_loop || count( array_keys( $wp_current_filter, 'page_link' ) ) > 1 ) {
-      // Avoid getting stuck in loops.
+		// Do not localize links in the PLL language switcher.
+		// Avoid getting stuck in loops.
+		if ( ! $this->page_link || count( array_keys( $wp_current_filter, 'page_link' ) ) > 1 ) {
+			return $link;
+		}
 
-    } elseif ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) ) {
-      // Localize links only for the Ultimate Member pages.
+		if ( is_array( UM()->config()->permalinks ) && in_array( $post_id, UM()->config()->permalinks, true ) ) {
+			// Localize links only for the Ultimate Member pages.
 
-      if ( pll_get_post_language( $post_id ) !== pll_current_language() ) {
-        // Skip already localized links.
-        
-        $is_loop = true;
-        $url     = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
-        $link    = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
-      }
-      $is_loop = false;
-    }
+			if ( pll_get_post_language( $post_id ) !== pll_current_language() ) {
+				$this->page_link = false; // Avoid getting stuck in loops.
+				$url             = $this->get_page_url_for_language( $post_id, UM()->Polylang()->get_current() );
+				$link            = ( $link !== $url ) ? $url : add_query_arg( 'lang', pll_current_language(), $url );
+			}
+			$this->page_link = true;
+		}
 
-    return $link;
+		return $link;
 	}
-
 
 	/**
 	 * Filter core page URL.
@@ -331,17 +364,17 @@ class Permalinks {
 
 				$link = home_url();
 				$url  = PLL()->links->get_home_url( $lang );
+
 				$_REQUEST['redirect_to'] = ( $link !== $url ) ? $url : add_query_arg( 'lang', $lang, $url );
 
-			} elseif( 'redirect_url' === um_user( 'after_logout' ) ) {
+			} elseif ( 'redirect_url' === um_user( 'after_logout' ) ) {
 				// if "Action to be taken after logout" is set to "Go to Custom URL".
 
 				$redirect_url = apply_filters( 'um_logout_redirect_url', um_user( 'logout_redirect_url' ), um_user( 'ID' ) );
 				$page_path    = trim( str_replace( home_url(), '', $redirect_url ), " \t\n\r\0\x0B/\\" );
 				$page         = get_page_by_path( $page_path );
 				if ( is_object( $page ) ) {
-					$redirect_to = $this->get_page_url_for_language( $page->ID, $lang );
-					$_REQUEST['redirect_to'] = $redirect_to;
+					$_REQUEST['redirect_to'] = $this->get_page_url_for_language( $page->ID, $lang );
 				}
 			}
 		}
@@ -395,6 +428,7 @@ class Permalinks {
 
 	/**
 	 * Localize password reset link - {password_reset_link}.
+	 *
 	 * Hook: um_get_core_page_filter
 	 *
 	 * @see \um\core\Password
@@ -414,5 +448,4 @@ class Permalinks {
 		}
 		return $url;
 	}
-
 }

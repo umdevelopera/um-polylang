@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\core\Mail
+ *
+ * @package um_ext\um_polylang\core
+ */
+
 namespace um_ext\um_polylang\core;
 
 defined( 'ABSPATH' ) || exit;
@@ -115,5 +121,4 @@ class Mail {
 			$_GET['lang'] = substr( $user->locale, 0, 2 );
 		}
 	}
-
 }

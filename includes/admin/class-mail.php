@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\admin\Mail
+ *
+ * @package um_ext\um_polylang\admin
+ */
+
 namespace um_ext\um_polylang\admin;
 
 defined( 'ABSPATH' ) || exit;
@@ -66,7 +72,7 @@ class Mail {
 				$template_dir = dirname( $template_path );
 
 				if ( wp_mkdir_p( $template_dir ) ) {
-					file_put_contents( $template_path, '' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+					file_put_contents( $template_path, '' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 				}
 			}
 		}
@@ -197,5 +203,4 @@ class Mail {
 
 		return $icon_html;
 	}
-
 }

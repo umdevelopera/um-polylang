@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class um_ext\um_polylang\core\Posts
+ *
+ * @package um_ext\um_polylang\core
+ */
+
 namespace um_ext\um_polylang\core;
 
 defined( 'ABSPATH' ) || exit;
@@ -19,6 +25,9 @@ class Posts {
 		'_wpml_media_duplicate',
 	);
 
+	/**
+	 * Class constructor.
+	 */
 	public function __construct() {
 		add_action( 'pll_save_post', array( $this, 'pll_save_post' ), 20, 3 );
 	}
@@ -43,7 +52,7 @@ class Posts {
 		$def_lang = pll_default_language();
 
 		$posts_translations = array();
-		foreach( $posts as $post => $post_id ) {
+		foreach ( $posts as $post => $post_id ) {
 			$cur_lang = PLL()->model->post->get_language( $post_id );
 			if ( false === $cur_lang ) {
 				PLL()->model->post->set_language( $post_id, PLL()->pref_lang );
@@ -158,5 +167,4 @@ class Posts {
 			}
 		}
 	}
-
 }

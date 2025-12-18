@@ -1,6 +1,13 @@
 <?php
+/**
+ * Class um_ext\um_polylang\front\Shortcodes
+ *
+ * @package um_ext\um_polylang\front
+ */
+
 namespace um_ext\um_polylang\front;
-use \PLL_Switcher;
+
+use PLL_Switcher;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,7 +46,7 @@ class Shortcodes extends PLL_Switcher {
 	 *
 	 * Shortcode: [um_pll_switcher]
 	 *
-	 * @param array     $atts {
+	 * @param array $atts {
 	 *   Optional array of arguments.
 	 *
 	 *   @type int    $dropdown               The list is displayed as dropdown if set, defaults to 0.
@@ -53,7 +60,7 @@ class Shortcodes extends PLL_Switcher {
 	 * }
 	 * @return string|array either the html markup of the switcher or the raw elements to build a custom language switcher
 	 */
-	function um_pll_switcher( $atts ) {
+	public function um_pll_switcher( $atts ) {
 		$args = shortcode_atts( self::DEFAULTS, $atts );
 
 		$output = $this->the_languages( PLL()->links, $args );
@@ -77,5 +84,4 @@ class Shortcodes extends PLL_Switcher {
 
 		return $output;
 	}
-
 }

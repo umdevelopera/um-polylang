@@ -1,5 +1,12 @@
 <?php
+/**
+ * Class um_ext\um_polylang\core\Setup
+ *
+ * @package um_ext\um_polylang\core
+ */
+
 namespace um_ext\um_polylang\core;
+
 use um_ext\um_polylang\admin\PLL_Settings;
 
 defined( 'ABSPATH' ) || exit;
@@ -70,5 +77,4 @@ class Setup {
 		$this->reset_admin_notices();
 		$this->set_default_settings();
 	}
-
 }
