@@ -34,7 +34,7 @@ class Translations {
 		add_filter( 'um_change_field_label', array( $this, 'pll_esc_html' ) );
 
 		// Translate field value.
-		add_filter( 'um_profile_field_filter_hook__', array( $this, 'pll_esc_html' ) );
+		add_filter( 'um_profile_field_filter_hook__', array( $this, 'pll_value' ), 20 );
 		// account.
 		add_action( 'shortcode_atts_ultimatemember_account', array( $this, 'translate_value_on' ) );
 		add_action( 'um_after_account_page_load', array( $this, 'translate_value_off' ) );
@@ -68,6 +68,27 @@ class Translations {
 			$text           = _wp_specialchars( $translate_text, ENT_QUOTES );
 		}
 		return $text;
+	}
+
+	/**
+	 * Translating for the field value.
+	 *
+	 * Hook: um_profile_field_filter_hook__ - 20
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param array|string $value Value.
+	 * @return array|string Translated value.
+	 */
+	public function pll_value( $value ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as &$option ) {
+				$option = $this->pll_value( $option );
+			}
+		} else {
+			$value = pll__( $value );
+		}
+		return $value;
 	}
 
 	/**

@@ -255,7 +255,7 @@ function um_polylang_profile_tabs_get_tabs() {
 								\Elementor\Plugin::instance()->frontend->remove_content_filter();
 							}
 
-							echo wp_kses_post( apply_filters( 'the_content', $tab_content ) );
+							echo wp_kses( apply_filters( 'the_content', $tab_content ), UM()->get_allowed_html( 'templates' ) );
 
 							if ( class_exists( '\Elementor\Plugin' ) ) {
 								\Elementor\Plugin::instance()->frontend->add_content_filter();

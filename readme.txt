@@ -8,10 +8,10 @@ License: GNU Version 3 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
 Requires at least: 6.5
-Tested up to: 6.9
+Tested up to: 6.9.1
 Requires UM core at least: 2.6.8
-Tested UM core up to: 2.11.1
-Stable tag: 1.3.0
+Tested UM core up to: 2.11.2
+Stable tag: 1.3.1
 
 == Description ==
 
@@ -45,6 +45,13 @@ You can install this plugin from the ZIP file as any other plugin. Follow this i
 Download ZIP file from Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
 
 == Changelog ==
+
+= 1.3.1: February 27, 2026 =
+
+* Bugfixes:
+
+  - Fixed translation of fields with HTML code.
+  - Fixed sanitizing of the translated profile tab.
 
 = 1.3.0: December 25, 2025 =
 
