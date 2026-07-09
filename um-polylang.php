@@ -11,8 +11,8 @@
  * Requires Plugins: ultimate-member
  * Requires at least: 6.5
  * Requires PHP: 7.4
- * UM version: 2.11.2
- * Version: 1.3.1
+ * UM version: 2.12.1
+ * Version: 1.3.2
  *
  * @package um_ext\um_polylang
  */
@@ -50,7 +50,7 @@ register_activation_hook(
 add_action(
 	'init',
 	function () {
-		if ( ! defined( 'um_path' ) || ! function_exists( 'UM' ) || ! UM()->dependencies()->ultimatemember_active_check() ) {
+		if ( ! function_exists( 'UM' ) || ! UM()->dependencies()->ultimatemember_active_check() ) {
 			// Ultimate Member is not active.
 			add_action(
 				'admin_notices',

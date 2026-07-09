@@ -46,6 +46,13 @@ Download ZIP file from Google Drive. You can find download links here: https://g
 
 == Changelog ==
 
+= 1.3.2: July 10, 2026 =
+
+* Bugfixes:
+
+  - Fixed translation of fields with quotes.
+  - Fixed special member directory filters with an unreal meta key, like the "Online Status" filter.
+
 = 1.3.1: February 27, 2026 =
 
 * Bugfixes:

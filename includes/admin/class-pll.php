@@ -80,23 +80,23 @@ class PLL_Settings {
 		foreach ( $fields as $metakey => $field ) {
 			if ( ! empty( $field['label'] ) ) {
 				$name   = $metakey . '-label';
-				$string = sanitize_text_field( $field['label'] );
+				$string = wp_unslash( sanitize_text_field( $field['label'] ) );
 				pll_register_string( $name, $string, 'ultimate-member' );
 			}
 			if ( ! empty( $field['help'] ) ) {
 				$name   = $metakey . '-help';
-				$string = sanitize_text_field( $field['help'] );
+				$string = wp_unslash( sanitize_text_field( $field['help'] ) );
 				pll_register_string( $name, $string, 'ultimate-member' );
 			}
 			if ( ! empty( $field['placeholder'] ) ) {
 				$name   = $metakey . '-placeholder';
-				$string = sanitize_text_field( $field['placeholder'] );
+				$string = wp_unslash( sanitize_text_field( $field['placeholder'] ) );
 				pll_register_string( $name, $string, 'ultimate-member' );
 			}
 			if ( ! empty( $field['options'] ) && is_array( $field['options'] ) && empty( $field['custom_dropdown_options_source'] ) ) {
 				foreach ( $field['options'] as $ok => $ov ) {
 					$name   = $metakey . '-option-' . sanitize_key( $ok );
-					$string = sanitize_text_field( $ov );
+					$string = wp_unslash( sanitize_text_field( $ov ) );
 					pll_register_string( $name, $string, 'ultimate-member' );
 				}
 			}

@@ -64,8 +64,9 @@ class Translations {
 				$option = $this->pll_esc_html( $option );
 			}
 		} else {
-			$translate_text = pll__( $text );
-			$text           = _wp_specialchars( $translate_text, ENT_QUOTES );
+			$text_decoded    = wp_specialchars_decode( $text, ENT_QUOTES );
+			$text_translated = pll__( $text_decoded );
+			$text            = _wp_specialchars( $text_translated, ENT_QUOTES );
 		}
 		return $text;
 	}
@@ -107,11 +108,13 @@ class Translations {
 		}
 
 		// Maybe translate options.
-		if ( ! empty( $field['options'] ) && is_array( $field['options'] )
+		if ( ! empty( $field['options'] )
+				&& is_array( $field['options'] )
 				&& array_is_list( $field['options'] ) // skip fields with predefined keys.
-				&& isset( $field['metakey'] ) // skip fields without mete key.
+				&& isset( $field['metakey'] ) // skip fields without meta key.
 				&& empty( strstr( $field['metakey'], 'role_' ) ) // skip role fields.
 				&& empty( $field['custom_dropdown_options_source'] ) // skip fields with custom options source.
+				&& empty( $field['disable_filters_pre_query'] ) // skip special filters like "Online Status".
 				) {
 			$field['options_pll'] = true;
 			$field['custom']      = true;
