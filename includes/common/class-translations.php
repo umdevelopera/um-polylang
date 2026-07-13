@@ -1,22 +1,22 @@
 <?php
 /**
- * Class um_ext\um_polylang\core\Translations
+ * Class um_ext\um_polylang\common\Translations
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 
-namespace um_ext\um_polylang\core;
+namespace um_ext\um_polylang\common;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Translate fields and filters using the String Translation feature.
  *
- * Get an instance this way: UM()->Polylang()->core()->translations()
+ * Get an instance this way: UM()->Polylang()->common()->translations()
  *
  * @link https://polylang.pro/documentation/support/guides/strings-translation/
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  *
  * @since 1.3.0
  */

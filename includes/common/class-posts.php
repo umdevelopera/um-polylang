@@ -1,11 +1,11 @@
 <?php
 /**
- * Class um_ext\um_polylang\core\Posts
+ * Class um_ext\um_polylang\common\Posts
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 
-namespace um_ext\um_polylang\core;
+namespace um_ext\um_polylang\common;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Get an instance this way: UM()->Polylang()->posts()
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 class Posts {
 

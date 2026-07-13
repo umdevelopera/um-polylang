@@ -2,13 +2,10 @@
 /**
  * Integration with the "Account tabs" extension.
  *
- * @package um_ext\um_polylang\extensions
+ * @package um_ext\um_polylang\integrations
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
+defined( 'ABSPATH' ) || exit;
 
 /**
  * The "Create Tabs" button handler.
@@ -35,7 +32,7 @@ add_action( 'um_admin_do_action__um_pll_create_account_tabs', 'um_polylang_accou
 /**
  * Update the "Embed a profile form" setting in the translated tab.
  *
- * @see um_ext\um_polylang\core\Posts::create_posts()
+ * @see um_ext\um_polylang\common\Posts::create_posts()
  *
  * @param int    $tr_id     Translated post ID.
  * @param int    $post_id   Original post ID.

@@ -1,23 +1,23 @@
 <?php
 /**
- * Class um_ext\um_polylang\core\Permalinks
+ * Class um_ext\um_polylang\common\Permalinks
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 
-namespace um_ext\um_polylang\core;
+namespace um_ext\um_polylang\common;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Localize links.
  *
- * Get an instance this way: UM()->Polylang()->core()->permalinks()
+ * Get an instance this way: UM()->Polylang()->common()->permalinks()
  *
  * @version 1.1.0 static method `update_core_pages` removed.
  * @version 1.2.2 public method `localize_reset_url` added.
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 class Permalinks {
 
@@ -87,7 +87,7 @@ class Permalinks {
 	/**
 	 * Add rewrite rules for the Account and User page.
 	 *
-	 * @hooked rewrite_rules_array
+	 * Hooked: rewrite_rules_array
 	 *
 	 * @since 1.0.0
 	 *
@@ -270,11 +270,26 @@ class Permalinks {
 
 
 	/**
+	 * Check if this is a predefined UM page or a translation of it.
+	 *
+	 * @param int $post_id The ID of the page.
+	 * @return bool Returns `true` if this is a predefined UM page.
+	 */
+	public function is_predefined_page( $post_id ) {
+		if ( is_object( $post_id ) ) {
+			$post_id = $post_id->ID;
+		}
+		$def_post_id = pll_get_post( $post_id, pll_default_language() );
+		return $def_post_id ? um_post_is_predefined_page( $def_post_id ) : um_post_is_predefined_page( $post_id );
+	}
+
+
+	/**
 	 * Filter account activation link.
 	 *
 	 * Hook: um_activate_url
 	 *
-	 * @see \um\core\Permalinks
+	 * @see \um\common\Permalinks
 	 *
 	 * @since 1.1.0
 	 *
@@ -292,7 +307,7 @@ class Permalinks {
 	/**
 	 * Filter logout page URL.
 	 *
-	 * @hooked page_link
+	 * Hooked: page_link
 	 *
 	 * @since version 1.2.1
 	 *
@@ -305,7 +320,7 @@ class Permalinks {
 
 		// Do not localize links in the PLL language switcher.
 		// Avoid getting stuck in loops.
-		if ( ! $this->page_link || count( array_keys( $wp_current_filter, 'page_link' ) ) > 1 ) {
+		if ( ! $this->page_link || count( array_keys( $wp_current_filter, 'page_link', true ) ) > 1 ) {
 			return $link;
 		}
 
@@ -326,9 +341,10 @@ class Permalinks {
 	/**
 	 * Filter core page URL.
 	 *
-	 * @hooked um_get_core_page_filter
+	 * Hooked: um_get_core_page_filter
 	 *
 	 * @since 1.0.0
+	 * @version 1.3.3 The `um_get_predefined_page_id` function is used to get the page ID.
 	 *
 	 * @param  string $url     Default page URL.
 	 * @param  string $slug    Core page slug.
@@ -337,10 +353,12 @@ class Permalinks {
 	 */
 	public function localize_core_page_url( $url, $slug, $updated = '' ) {
 		if ( ! UM()->Polylang()->is_default() ) {
-			$page_id = UM()->config()->permalinks[ $slug ];
-			$url     = $this->get_page_url_for_language( $page_id, UM()->Polylang()->get_current() );
-			if ( $updated ) {
-				$url = add_query_arg( 'updated', esc_attr( $updated ), $url );
+			$page_id = um_get_predefined_page_id( $slug );
+			if ( $page_id ) {
+				$url = $this->get_page_url_for_language( $page_id, UM()->Polylang()->get_current() );
+				if ( $updated ) {
+					$url = add_query_arg( 'updated', esc_attr( $updated ), $url );
+				}
 			}
 		}
 		return $url;
@@ -350,10 +368,10 @@ class Permalinks {
 	/**
 	 * The logout redirect URL.
 	 *
-	 * @hooked template_redirect - 9990
+	 * Hooked: template_redirect - 9990
 	 *
 	 * @see \um\core\Logout
-	 * @since version 1.2.1
+	 * @since 1.2.1
 	 */
 	public function localize_logout_page() {
 		if ( is_user_logged_in() && um_is_core_page( 'logout' ) && empty( $_REQUEST['redirect_to'] ) ) {
@@ -371,10 +389,9 @@ class Permalinks {
 				// if "Action to be taken after logout" is set to "Go to Custom URL".
 
 				$redirect_url = apply_filters( 'um_logout_redirect_url', um_user( 'logout_redirect_url' ), um_user( 'ID' ) );
-				$page_path    = trim( str_replace( home_url(), '', $redirect_url ), " \t\n\r\0\x0B/\\" );
-				$page         = get_page_by_path( $page_path );
-				if ( is_object( $page ) ) {
-					$_REQUEST['redirect_to'] = $this->get_page_url_for_language( $page->ID, $lang );
+				$page_id      = url_to_postid( trim( $redirect_url ) );
+				if ( $page_id ) {
+					$_REQUEST['redirect_to'] = $this->get_page_url_for_language( $page_id, $lang );
 				}
 			}
 		}
@@ -384,8 +401,8 @@ class Permalinks {
 	/**
 	 * Filter page URL on buttons.
 	 *
-	 * @hooked um_login_form_button_two_url
-	 * @hooked um_register_form_button_two_url
+	 * Hooked: um_login_form_button_two_url
+	 * Hooked: um_register_form_button_two_url
 	 *
 	 * @since 1.0.0
 	 *
@@ -394,9 +411,9 @@ class Permalinks {
 	 * @return string
 	 */
 	public function localize_page_url( $url, $args = array() ) {
-		$page = get_page_by_path( trim( $url, "/ \n\r\t\v\0" ) );
-		if ( $page && is_a( $page, '\WP_Post' ) && ! UM()->Polylang()->is_default() ) {
-			$url = $this->get_page_url_for_language( $page->ID, UM()->Polylang()->get_current() );
+		$page_id = url_to_postid( trim( $url ) );
+		if ( $page_id && ! UM()->Polylang()->is_default() ) {
+			$url = $this->get_page_url_for_language( $page_id, UM()->Polylang()->get_current() );
 		}
 		return $url;
 	}
@@ -408,15 +425,17 @@ class Permalinks {
 	 * Hook: um_profile_permalink - 10
 	 *
 	 * @since 1.0.0
-	 * @version 1.2.2 parameter $slug added.
+	 * @version 1.2.2 parameter $slug is added.
+	 * @version 1.3.3 parameter $page_id is deprecated.
 	 *
 	 * @param string  $profile_url Default profile URL.
-	 * @param integer $page_id     The page ID.
+	 * @param integer $page_id     The page ID. Deprecated.
 	 * @param string  $slug        User profile slug.
 	 * @return string
 	 */
 	public function localize_profile_permalink( $profile_url, $page_id, $slug ) {
-		$url = $this->get_page_url_for_language( $page_id );
+		$page_id = um_get_predefined_page_id( 'user' );
+		$url     = $this->get_page_url_for_language( $page_id );
 		if ( UM()->is_permalinks ) {
 			$profile_url = trailingslashit( $url ) . trailingslashit( strtolower( $slug ) );
 		} else {

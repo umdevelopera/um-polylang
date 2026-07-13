@@ -9,10 +9,10 @@
  * Domain Path: /languages
  *
  * Requires Plugins: ultimate-member
- * Requires at least: 6.5
+ * Requires at least: 7.0
  * Requires PHP: 7.4
- * UM version: 2.12.1
- * Version: 1.3.2
+ * UM version: 2.13.0
+ * Version: 1.3.3
  *
  * @package um_ext\um_polylang
  */
@@ -37,9 +37,9 @@ register_activation_hook(
 	function () {
 		if ( function_exists( 'UM' ) && function_exists( 'pll_languages_list' ) ) {
 			require_once 'includes/admin/class-pll.php';
-			require_once 'includes/core/class-setup.php';
-			if ( class_exists( 'um_ext\um_polylang\core\Setup' ) ) {
-				$setup = new um_ext\um_polylang\core\Setup();
+			require_once 'includes/common/class-setup.php';
+			if ( class_exists( 'um_ext\um_polylang\common\Setup' ) ) {
+				$setup = new um_ext\um_polylang\common\Setup();
 				$setup->run();
 			}
 		}

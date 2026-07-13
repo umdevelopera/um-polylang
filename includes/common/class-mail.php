@@ -1,20 +1,20 @@
 <?php
 /**
- * Class um_ext\um_polylang\core\Mail
+ * Class um_ext\um_polylang\common\Mail
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 
-namespace um_ext\um_polylang\core;
+namespace um_ext\um_polylang\common;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Translate email templates.
  *
- * Get an instance this way: UM()->Polylang()->core()->mail()
+ * Get an instance this way: UM()->Polylang()->common()->mail()
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  *
  * @version 1.2.2 public method `set_user_lang` added.
  */

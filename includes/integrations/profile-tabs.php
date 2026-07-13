@@ -2,13 +2,17 @@
 /**
  * Integration with the "Profile tabs" extension.
  *
- * @package um_ext\um_polylang\extensions
+ * @package um_ext\um_polylang\integrations
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
+/**
+ * Protection against the scenario where the plugin is active but not working.
+ */
+if ( ! class_exists( 'UM_Profile_Tabs' ) ) {
+	return;
+}
 
 /**
  * The "Create Tabs" button handler.
@@ -35,7 +39,7 @@ add_action( 'um_admin_do_action__um_pll_create_profile_tabs', 'um_polylang_profi
 /**
  * Update the "Custom Profile Form" setting in the translated tab.
  *
- * @see um_ext\um_polylang\core\Posts::create_posts()
+ * @see um_ext\um_polylang\common\Posts::create_posts()
  *
  * @param int    $tr_id     Translated post ID.
  * @param int    $post_id   Original post ID.
@@ -291,12 +295,59 @@ function um_polylang_profile_tabs_get_tabs() {
 
 
 /**
+ * Filters User Profile Body wrapper classes.
+ * Adds the `um-profile-custom-form` class to the tab with the embedded form.
+ *
+ * Hooked: um_profile_body_wrapper_classes - 10
+ *
+ * @since 1.3.3
+ *
+ * @param array  $classes User Profile body classes.
+ * @param array  $args    User Profile data.
+ * @param string $nav     Profile menu slug.
+ * @return array
+ */
+function um_polylang_profile_tabs_body_wrapper_classes( $classes, $args, $nav ) {
+	$tabs = um_polylang_profile_tabs_get_tabs();
+	if ( array_key_exists( $nav, $tabs ) && ! empty( $tabs[ $nav ]['id'] ) && ! empty( $tabs[ $nav ]['form'] ) ) {
+		$classes[] = 'um-profile-custom-form';
+	}
+	return array_unique( $classes );
+}
+add_filter( 'um_profile_body_wrapper_classes', 'um_polylang_profile_tabs_body_wrapper_classes', 10, 3 );
+
+
+/**
+ * Integration with the "User Bookmarks" extension.
+ * Disable the "Bookmark" button in the custom profile tab content.
+ *
+ * Hooked: um_user_bookmarks_post_the_content_is_disabled - 10
+ *
+ * @see um_ext\um_user_bookmarks\common\Posts::add_um_user_bookmarks_button()
+ * @since 1.3.3
+ *
+ * @param bool    $disabled Whether the "Bookmark" button is disabled.
+ * @param WP_Post $post     Post.
+ * @return bool
+ */
+function um_polylang_profile_tabs_user_bookmarks_is_disabled( $disabled, $post ) {
+	if ( UM()->Polylang()->common()->permalinks()->is_predefined_page( $post ) ) {
+		$disabled = true;
+	}
+	return $disabled;
+}
+add_filter( 'um_user_bookmarks_post_the_content_is_disabled', 'um_polylang_profile_tabs_user_bookmarks_is_disabled', 10, 2 );
+
+
+/**
  * Get class Profile.
  *
  * @since 1.2.3
  *
- * @return um_ext\um_profile_tabs\core\Profile
+ * @return um_ext\um_profile_tabs\common\Profile
  */
 function um_polylang_profile_tabs_get_class_profile() {
-	return method_exists( UM()->Profile_Tabs(), 'profile' ) ? UM()->Profile_Tabs()->profile() : UM()->Profile_Tabs()->common()->profile();
+	return method_exists( UM()->Profile_Tabs(), 'profile' )
+			? UM()->Profile_Tabs()->profile()            // Old UI.
+			: UM()->Profile_Tabs()->common()->profile(); // New UI.
 }

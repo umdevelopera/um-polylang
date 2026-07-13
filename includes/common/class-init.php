@@ -1,20 +1,20 @@
 <?php
 /**
- * Class um_ext\um_polylang\core\Init
+ * Class um_ext\um_polylang\common\Init
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 
-namespace um_ext\um_polylang\core;
+namespace um_ext\um_polylang\common;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Common functionality.
  *
- * Get an instance this way: UM()->Polylang()->core()
+ * Get an instance this way: UM()->Polylang()->common()
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 class Init {
 
@@ -36,7 +36,7 @@ class Init {
 	 */
 	public function mail() {
 		if ( empty( UM()->classes['um_polylang_mail'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/core/class-mail.php';
+			require_once UM_POLYLANG_PATH . 'includes/common/class-mail.php';
 			UM()->classes['um_polylang_mail'] = new Mail();
 		}
 		return UM()->classes['um_polylang_mail'];
@@ -50,7 +50,7 @@ class Init {
 	 */
 	public function permalinks() {
 		if ( empty( UM()->classes['um_polylang_permalinks'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/core/class-permalinks.php';
+			require_once UM_POLYLANG_PATH . 'includes/common/class-permalinks.php';
 			UM()->classes['um_polylang_permalinks'] = new Permalinks();
 		}
 		return UM()->classes['um_polylang_permalinks'];
@@ -64,7 +64,7 @@ class Init {
 	 */
 	public function translations() {
 		if ( empty( UM()->classes['um_polylang_translations'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/core/class-translations.php';
+			require_once UM_POLYLANG_PATH . 'includes/common/class-translations.php';
 			UM()->classes['um_polylang_translations'] = new Translations();
 		}
 		return UM()->classes['um_polylang_translations'];

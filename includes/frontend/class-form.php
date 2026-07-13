@@ -1,20 +1,20 @@
 <?php
 /**
- * Class um_ext\um_polylang\front\Form
+ * Class um_ext\um_polylang\frontend\Form
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 
-namespace um_ext\um_polylang\front;
+namespace um_ext\um_polylang\frontend;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Translate form.
  *
- * Get an instance this way: UM()->Polylang()->front()->form()
+ * Get an instance this way: UM()->Polylang()->frontend()->form()
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 class Form {
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Class um_ext\um_polylang\front\Shortcodes
+ * Class um_ext\um_polylang\frontend\Shortcodes
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 
-namespace um_ext\um_polylang\front;
+namespace um_ext\um_polylang\frontend;
 
 use PLL_Switcher;
 
@@ -14,9 +14,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Add shortcodes.
  *
- * Get an instance this way: UM()->Polylang()->front()->shortcodes()
+ * Get an instance this way: UM()->Polylang()->frontend()->shortcodes()
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 class Shortcodes extends PLL_Switcher {
 	const DEFAULTS = array(

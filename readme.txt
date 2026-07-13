@@ -7,11 +7,11 @@ Tags: ultimate member, polylang, multilingual
 License: GNU Version 3 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
-Requires at least: 6.5
-Tested up to: 6.9.1
+Requires at least: 7.0
+Tested up to: 7.1
 Requires UM core at least: 2.6.8
-Tested UM core up to: 2.11.2
-Stable tag: 1.3.1
+Tested UM core up to: 2.13.0
+Stable tag: 1.3.3
 
 == Description ==
 
@@ -45,6 +45,17 @@ You can install this plugin from the ZIP file as any other plugin. Follow this i
 Download ZIP file from Google Drive. You can find download links here: https://github.com/umdevelopera/um-polylang
 
 == Changelog ==
+
+= 1.3.3: September 9, 2026 =
+
+* Enhancements:
+
+  - The extension structure is updated to match the new standard.
+  - Added protection against the scenario where the "Profile tabs" extension is active but not working.
+  - Added a method to check whether a page is a predefined UM page or a translation of it.
+    Example: `UM()->Polylang()->common()->permalinks()->is_predefined_page( $page_id )`
+  - Deprecated the 2nd parameter `$page_id` of the `um_profile_permalink` hook.
+  - Use of the `get_page_by_path` function is replaced with the `url_to_postid` function.
 
 = 1.3.2: July 10, 2026 =
 

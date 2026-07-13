@@ -1,11 +1,11 @@
 <?php
 /**
- * Class um_ext\um_polylang\core\Setup
+ * Class um_ext\um_polylang\common\Setup
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 
-namespace um_ext\um_polylang\core;
+namespace um_ext\um_polylang\common;
 
 use um_ext\um_polylang\admin\PLL_Settings;
 
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Get an instance this way: UM()->Polylang()->setup()
  *
- * @package um_ext\um_polylang\core
+ * @package um_ext\um_polylang\common
  */
 class Setup {
 

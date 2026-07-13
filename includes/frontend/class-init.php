@@ -1,20 +1,20 @@
 <?php
 /**
- * Class um_ext\um_polylang\front\Init
+ * Class um_ext\um_polylang\frontend\Init
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 
-namespace um_ext\um_polylang\front;
+namespace um_ext\um_polylang\frontend;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Front-end functionality.
  *
- * Get an instance this way: UM()->Polylang()->front()
+ * Get an instance this way: UM()->Polylang()->frontend()
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 class Init {
 
@@ -39,7 +39,7 @@ class Init {
 	 */
 	public function fields() {
 		if ( empty( UM()->classes['um_polylang_fields'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/front/class-fields.php';
+			require_once UM_POLYLANG_PATH . 'includes/frontend/class-fields.php';
 			UM()->classes['um_polylang_fields'] = new Fields();
 		}
 		return UM()->classes['um_polylang_fields'];
@@ -53,7 +53,7 @@ class Init {
 	 */
 	public function form() {
 		if ( empty( UM()->classes['um_polylang_form'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/front/class-form.php';
+			require_once UM_POLYLANG_PATH . 'includes/frontend/class-form.php';
 			UM()->classes['um_polylang_form'] = new Form();
 		}
 		return UM()->classes['um_polylang_form'];
@@ -69,7 +69,7 @@ class Init {
 	 */
 	public function shortcodes() {
 		if ( empty( UM()->classes['um_polylang_shortcodes'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/front/class-shortcodes.php';
+			require_once UM_POLYLANG_PATH . 'includes/frontend/class-shortcodes.php';
 			UM()->classes['um_polylang_shortcodes'] = new Shortcodes();
 		}
 		return UM()->classes['um_polylang_shortcodes'];

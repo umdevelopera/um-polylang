@@ -1,20 +1,20 @@
 <?php
 /**
- * Class um_ext\um_polylang\front\Fields
+ * Class um_ext\um_polylang\frontend\Fields
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 
-namespace um_ext\um_polylang\front;
+namespace um_ext\um_polylang\frontend;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Translate form fields.
  *
- * Get an instance this way: UM()->Polylang()->front()->fields()
+ * Get an instance this way: UM()->Polylang()->frontend()->fields()
  *
- * @package um_ext\um_polylang\front
+ * @package um_ext\um_polylang\frontend
  */
 class Fields {
 

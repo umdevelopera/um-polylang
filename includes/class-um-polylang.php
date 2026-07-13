@@ -43,20 +43,20 @@ class UM_Polylang {
 	 */
 	public function __construct() {
 
-		$this->core();
+		$this->common();
 		if ( UM()->is_request( 'admin' ) ) {
 			$this->admin();
 			$this->posts();
 		} elseif ( UM()->is_request( 'frontend' ) ) {
-			$this->front();
+			$this->frontend();
 		}
 
 		// Extensions.
-		if ( defined( 'um_account_tabs_version' ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/extensions/account-tabs.php';
+		if ( is_plugin_active( 'um-account-tabs/um-account-tabs.php' ) ) {
+			require_once UM_POLYLANG_PATH . 'includes/integrations/account-tabs.php';
 		}
-		if ( defined( 'UM_PROFILE_TABS_VERSION' ) && is_object( @UM()->Profile_Tabs() ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/extensions/profile-tabs.php';
+		if ( is_plugin_active( 'um-profile-tabs/um-profile-tabs.php' ) ) {
+			require_once UM_POLYLANG_PATH . 'includes/integrations/profile-tabs.php';
 		}
 	}
 
@@ -66,7 +66,7 @@ class UM_Polylang {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @return um_ext\um_polylang\admin\Admin()
+	 * @return um_ext\um_polylang\admin\Init
 	 */
 	public function admin() {
 		if ( empty( UM()->classes['um_polylang_admin'] ) ) {
@@ -82,14 +82,14 @@ class UM_Polylang {
 	 *
 	 * @since 1.2.2
 	 *
-	 * @return um_ext\um_polylang\core\Init()
+	 * @return um_ext\um_polylang\common\Init
 	 */
-	public function core() {
-		if ( empty( UM()->classes['um_polylang_core'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/core/class-init.php';
-			UM()->classes['um_polylang_core'] = new um_ext\um_polylang\core\Init();
+	public function common() {
+		if ( empty( UM()->classes['um_polylang_common'] ) ) {
+			require_once UM_POLYLANG_PATH . 'includes/common/class-init.php';
+			UM()->classes['um_polylang_common'] = new um_ext\um_polylang\common\Init();
 		}
-		return UM()->classes['um_polylang_core'];
+		return UM()->classes['um_polylang_common'];
 	}
 
 
@@ -98,14 +98,14 @@ class UM_Polylang {
 	 *
 	 * @since 1.2.2
 	 *
-	 * @return um_ext\um_polylang\front\Init()
+	 * @return um_ext\um_polylang\frontend\Init
 	 */
-	public function front() {
-		if ( empty( UM()->classes['um_polylang_front'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/front/class-init.php';
-			UM()->classes['um_polylang_front'] = new um_ext\um_polylang\front\Init();
+	public function frontend() {
+		if ( empty( UM()->classes['um_polylang_frontend'] ) ) {
+			require_once UM_POLYLANG_PATH . 'includes/frontend/class-init.php';
+			UM()->classes['um_polylang_frontend'] = new um_ext\um_polylang\frontend\Init();
 		}
-		return UM()->classes['um_polylang_front'];
+		return UM()->classes['um_polylang_frontend'];
 	}
 
 
@@ -114,12 +114,12 @@ class UM_Polylang {
 	 *
 	 * @since 1.1.1
 	 *
-	 * @return um_ext\um_polylang\core\Posts()
+	 * @return um_ext\um_polylang\common\Posts
 	 */
 	public function posts() {
 		if ( empty( UM()->classes['um_polylang_posts'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/core/class-posts.php';
-			UM()->classes['um_polylang_posts'] = new um_ext\um_polylang\core\Posts();
+			require_once UM_POLYLANG_PATH . 'includes/common/class-posts.php';
+			UM()->classes['um_polylang_posts'] = new um_ext\um_polylang\common\Posts();
 		}
 		return UM()->classes['um_polylang_posts'];
 	}
@@ -130,12 +130,12 @@ class UM_Polylang {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @return um_ext\um_polylang\core\Setup()
+	 * @return um_ext\um_polylang\common\Setup
 	 */
 	public function setup() {
 		if ( empty( UM()->classes['um_polylang_setup'] ) ) {
-			require_once UM_POLYLANG_PATH . 'includes/core/class-setup.php';
-			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\core\Setup();
+			require_once UM_POLYLANG_PATH . 'includes/common/class-setup.php';
+			UM()->classes['um_polylang_setup'] = new um_ext\um_polylang\common\Setup();
 		}
 		return UM()->classes['um_polylang_setup'];
 	}
