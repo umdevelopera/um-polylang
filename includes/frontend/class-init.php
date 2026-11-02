@@ -68,6 +68,9 @@ class Init {
 	 * @return Shortcodes
 	 */
 	public function shortcodes() {
+		if ( ! class_exists( 'PLL_Switcher' ) ) {
+			return null;
+		}
 		if ( empty( UM()->classes['um_polylang_shortcodes'] ) ) {
 			require_once UM_POLYLANG_PATH . 'includes/frontend/class-shortcodes.php';
 			UM()->classes['um_polylang_shortcodes'] = new Shortcodes();
