@@ -7,8 +7,6 @@
 
 namespace um_ext\um_polylang\frontend;
 
-use PLL_Switcher;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -18,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @package um_ext\um_polylang\frontend
  */
-class Shortcodes extends PLL_Switcher {
+class Shortcodes {
 	const DEFAULTS = array(
 		'dropdown'               => 0, // Display as list and not as dropdown.
 		'show_flags'             => 1, // Don't show flags.
@@ -63,25 +61,21 @@ class Shortcodes extends PLL_Switcher {
 	public function um_pll_switcher( $atts ) {
 		$args = shortcode_atts( self::DEFAULTS, $atts );
 
-		$output = $this->the_languages( PLL()->links, $args );
-		if ( empty( $args['dropdown'] ) ) {
-			if ( ! empty( $args['item_display'] ) ) {
-				$search = '<li';
-				$style  = ' style="display: ' . $args['item_display'] . ';" ';
-				$output = str_replace( $search, $search . $style, $output );
-			}
-			$output = '<ul class="um-pll-switcher">' . $output . '</ul>';
-		} else {
-			if ( ! empty( $args['show_flags'] ) ) {
-				$lang     = UM()->Polylang()->get_current();
-				$language = PLL()->model->get_language( $lang );
-				if ( is_object( $language ) ) {
-					$output = $language->flag . ' ' . $output;
-				}
-			}
-			$output = '<div class="um-pll-switcher">' . $output . '</div>';
-		}
-
-		return $output;
+		// Map the shortcode attributes onto the switcher arguments.
+		return pll_the_languages(
+			array(
+				'layout'                 => ! empty( $args['dropdown'] ) ? 'dropdown' : ( 'inline' === $args['item_display'] ? 'horizontal' : 'vertical' ),
+				'show_flags'             => ! empty( $args['show_flags'] ),
+				'show_labels'            => empty( $args['show_names'] ) ? '' : ( 'slug' === $args['display_names_as'] ? 'codes' : 'names' ),
+				'preserve_spacing'       => 'discard' !== $args['item_spacing'],
+				'hide_current'           => ! empty( $args['hide_current'] ),
+				'hide_if_no_translation' => ! empty( $args['hide_if_no_translation'] ),
+				'force_home'             => ! empty( $args['force_home'] ),
+				'wrapper_classes'        => array( 'um-pll-switcher' ),
+				'show_wrapper'           => true,
+				'echo'                   => false,
+				'raw'                    => ! empty( $args['raw'] ),
+			)
+		);
 	}
 }
